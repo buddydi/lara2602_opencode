@@ -31,6 +31,11 @@ class Category extends Model
         return $this->hasMany(Category::class, 'parent_id')->with('allChildren')->orderBy('order');
     }
 
+    public function posts(): HasMany
+    {
+        return $this->hasMany(Post::class);
+    }
+
     public static function tree()
     {
         return static::with('allChildren')
