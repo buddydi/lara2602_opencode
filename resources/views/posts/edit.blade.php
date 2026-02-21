@@ -19,7 +19,7 @@
 <body>
     <h1>编辑文章</h1>
     
-    <form action="{{ route('posts.update', $post) }}" method="POST">
+    <form action="{{ route('posts.update', $post) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         
@@ -27,6 +27,19 @@
             <label for="title">标题</label>
             <input type="text" name="title" id="title" value="{{ old('title', $post->title) }}">
             @error('title')
+                <div class="error">{{ $message }}</div>
+            @enderror
+        </div>
+        
+        <div class="form-group">
+            <label for="cover_image">封面图片</label>
+            @if($post->cover_image)
+                <div style="margin-bottom: 10px;">
+                    <img src="{{ asset('storage/' . $post->cover_image) }}" alt="封面图" style="max-width: 200px; max-height: 200px;">
+                </div>
+            @endif
+            <input type="file" name="cover_image" id="cover_image" accept="image/*">
+            @error('cover_image')
                 <div class="error">{{ $message }}</div>
             @enderror
         </div>

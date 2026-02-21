@@ -30,6 +30,12 @@
 <body>
     <h1>{{ $post->title }}</h1>
     
+    @if($post->cover_image)
+        <div style="margin-bottom: 20px;">
+            <img src="{{ asset('storage/' . $post->cover_image) }}" alt="封面图" style="max-width: 100%; max-height: 400px;">
+        </div>
+    @endif
+    
     <div class="meta">
         作者：{{ $post->user->name }} | 
         状态：{{ $post->status }} | 

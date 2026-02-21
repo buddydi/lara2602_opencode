@@ -19,13 +19,21 @@
 <body>
     <h1>新建文章</h1>
     
-    <form action="{{ route('posts.store') }}" method="POST">
+    <form action="{{ route('posts.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         
         <div class="form-group">
             <label for="title">标题</label>
             <input type="text" name="title" id="title" value="{{ old('title') }}">
             @error('title')
+                <div class="error">{{ $message }}</div>
+            @enderror
+        </div>
+        
+        <div class="form-group">
+            <label for="cover_image">封面图片</label>
+            <input type="file" name="cover_image" id="cover_image" accept="image/*">
+            @error('cover_image')
                 <div class="error">{{ $message }}</div>
             @enderror
         </div>

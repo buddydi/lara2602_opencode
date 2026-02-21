@@ -1,3 +1,12 @@
 location / {
     try_files $uri $uri/ /index.php?$query_string;
 }
+
+location /storage/ {
+    alias D:/phpstudy_pro/WWW/lara2602/newshop/storage/app/public/;
+    
+    location ~ \.(jpg|jpeg|png|gif|ico|css|js|svg|woff|woff2|ttf|eot)$ {
+        expires 30d;
+        add_header Cache-Control "public, immutable";
+    }
+}
