@@ -10,7 +10,7 @@ class FrontCartController extends Controller
 {
     public function index()
     {
-        $cartItems = auth()->user()->cartItems()->with(['product', 'sku'])->get();
+        $cartItems = auth('customer')->user()->cartItems()->with(['product', 'sku'])->get();
         $total = $cartItems->sum(fn($item) => ($item->sku ? $item->sku->price : $item->product->price) * $item->quantity);
         
         return view('front.cart', compact('cartItems', 'total'));
@@ -35,7 +35,7 @@ class FrontCartController extends Controller
         
         $cartItem = CartItem::updateOrCreate(
             [
-                'user_id' => auth()->id(),
+                'customer_id' => auth('customer')->id(),
                 'product_id' => $product->id,
                 'product_sku_id' => $request->sku_id,
             ],
@@ -47,20 +47,27 @@ class FrontCartController extends Controller
 
     public function update(Request $request, CartItem $cartItem)
     {
-        if ($cartItem->user_id != auth()->id()) {
+        if ($cartItem->customer_id != auth('customer')->id()) {
             return back()->with('error', '无权操作');
         }
 
-        $request->validate(['quantity' => 'required|integer|min:1']);
-        
-        $cartItem->update(['quantity' => $request->quantity]);
+        if ($request->has('delta')) {
+            $newQuantity = $cartItem->quantity + $request->delta;
+            if ($newQuantity < 1) {
+                $newQuantity = 1;
+            }
+            $cartItem->update(['quantity' => $newQuantity]);
+        } else {
+            $request->validate(['quantity' => 'required|integer|min:1']);
+            $cartItem->update(['quantity' => $request->quantity]);
+        }
         
         return back();
     }
 
     public function destroy(CartItem $cartItem)
     {
-        if ($cartItem->user_id != auth()->id()) {
+        if ($cartItem->customer_id != auth('customer')->id()) {
             return back()->with('error', '无权操作');
         }
 

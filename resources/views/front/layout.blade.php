@@ -76,23 +76,23 @@
                 <a href="{{ route('products.index') }}">商品列表</a>
             </nav>
             <div class="user-area">
-                @auth
+                @auth('customer')
                     <a href="{{ route('cart.index') }}" class="cart-icon">
                         购物车
-                        @if(Auth::user()->cartItems->sum('quantity') > 0)
-                            <span class="cart-badge">{{ Auth::user()->cartItems->sum('quantity') }}</span>
+                        @if(Auth::guard('customer')->user()->cartItems->sum('quantity') > 0)
+                            <span class="cart-badge">{{ Auth::guard('customer')->user()->cartItems->sum('quantity') }}</span>
                         @endif
                     </a>
                     <a href="{{ route('orders.index') }}">我的订单</a>
                     <a href="{{ route('addresses.index') }}">收货地址</a>
-                    <span>{{ Auth::user()->name }}</span>
-                    <form method="POST" action="{{ route('logout') }}" style="display:inline;">
+                    <span>{{ Auth::guard('customer')->user()->name }}</span>
+                    <form method="POST" action="{{ route('customer.logout') }}" style="display:inline;">
                         @csrf
                         <button type="submit" style="background:none;border:none;color:#666;cursor:pointer;font-size:14px;">退出</button>
                     </form>
                 @else
-                    <a href="{{ route('login') }}">登录</a>
-                    <a href="{{ route('register') }}">注册</a>
+                    <a href="{{ route('customer.login') }}">登录</a>
+                    <a href="{{ route('customer.register') }}">注册</a>
                 @endauth
             </div>
         </div>

@@ -9,7 +9,7 @@ class FrontAddressController extends Controller
 {
     public function index()
     {
-        $addresses = auth()->user()->addresses()->orderBy('is_default', 'desc')->get();
+        $addresses = auth('customer')->user()->addresses()->orderBy('is_default', 'desc')->get();
         return view('front.address.index', compact('addresses'));
     }
 
@@ -31,17 +31,17 @@ class FrontAddressController extends Controller
         ]);
 
         if ($request->is_default) {
-            auth()->user()->addresses()->update(['is_default' => false]);
+            auth('customer')->user()->addresses()->update(['is_default' => false]);
         }
 
-        auth()->user()->addresses()->create($validated);
+        auth('customer')->user()->addresses()->create($validated);
 
         return redirect()->route('addresses.index')->with('success', '地址添加成功');
     }
 
     public function edit(Address $address)
     {
-        if ($address->user_id != auth()->id()) {
+        if ($address->customer_id != auth('customer')->id()) {
             return back()->with('error', '无权操作');
         }
         return view('front.address.edit', compact('address'));
@@ -49,7 +49,7 @@ class FrontAddressController extends Controller
 
     public function update(Request $request, Address $address)
     {
-        if ($address->user_id != auth()->id()) {
+        if ($address->customer_id != auth('customer')->id()) {
             return back()->with('error', '无权操作');
         }
 
@@ -64,7 +64,7 @@ class FrontAddressController extends Controller
         ]);
 
         if ($request->is_default) {
-            auth()->user()->addresses()->where('id', '!=', $address->id)->update(['is_default' => false]);
+            auth('customer')->user()->addresses()->where('id', '!=', $address->id)->update(['is_default' => false]);
         }
 
         $address->update($validated);
@@ -74,7 +74,7 @@ class FrontAddressController extends Controller
 
     public function destroy(Address $address)
     {
-        if ($address->user_id != auth()->id()) {
+        if ($address->customer_id != auth('customer')->id()) {
             return back()->with('error', '无权操作');
         }
 

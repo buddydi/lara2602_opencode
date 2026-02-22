@@ -42,11 +42,7 @@
                 </td>
                 <td style="color:#e4393c;">¥{{ ($item->sku ? $item->sku->price : $item->product->price) * $item->quantity }}</td>
                 <td>
-                    <form method="POST" action="{{ route('cart.destroy', $item) }}" style="display:inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" style="background:none;border:none;color:#e4393c;cursor:pointer;">删除</button>
-                    </form>
+                    <button type="button" onclick="deleteItem({{ $item->id }})" style="background:none;border:none;color:#e4393c;cursor:pointer;">删除</button>
                 </td>
             </tr>
             @endforeach
@@ -68,8 +64,24 @@
 
 <script>
 function updateQuantity(itemId, delta) {
-    // 简化实现，实际应该发送AJAX请求
-    location.reload();
+    fetch(`/cart/${itemId}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify({ delta: delta })
+    }).then(() => location.reload());
+}
+
+function deleteItem(itemId) {
+    if (!confirm('确定要删除这件商品吗？')) return;
+    fetch(`/cart/${itemId}`, {
+        method: 'DELETE',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        }
+    }).then(() => location.reload());
 }
 
 document.getElementById('select-all').addEventListener('change', function() {
@@ -80,6 +92,9 @@ document.getElementById('select-all').addEventListener('change', function() {
 document.querySelectorAll('.cart-checkbox').forEach(cb => {
     cb.addEventListener('change', updateSummary);
 });
+
+// 页面加载时初始化计算
+updateSummary();
 
 function updateSummary() {
     let count = 0;

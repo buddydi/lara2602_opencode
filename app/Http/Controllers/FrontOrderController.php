@@ -12,13 +12,13 @@ class FrontOrderController extends Controller
 {
     public function index()
     {
-        $orders = auth()->user()->orders()->with('items')->latest()->paginate(10);
+        $orders = auth('customer')->user()->orders()->with('items')->latest()->paginate(10);
         return view('front.order.index', compact('orders'));
     }
 
     public function show(Order $order)
     {
-        if ($order->user_id != auth()->id()) {
+        if ($order->customer_id != auth('customer')->id()) {
             return back()->with('error', '无权操作');
         }
         $order->load('items', 'address');
@@ -33,12 +33,12 @@ class FrontOrderController extends Controller
         ]);
 
         $address = Address::findOrFail($request->address_id);
-        if ($address->user_id != auth()->id()) {
+        if ($address->customer_id != auth('customer')->id()) {
             return back()->with('error', '无效的收货地址');
         }
 
         $cartItems = CartItem::whereIn('id', $request->cart_item_ids)
-            ->where('user_id', auth()->id())
+            ->where('customer_id', auth('customer')->id())
             ->with(['product', 'sku'])
             ->get();
 
@@ -69,7 +69,7 @@ class FrontOrderController extends Controller
         }
 
         $order = Order::create([
-            'user_id' => auth()->id(),
+            'customer_id' => auth('customer')->id(),
             'address_id' => $address->id,
             'order_no' => Order::generateOrderNo(),
             'total_amount' => $totalAmount,
@@ -89,7 +89,7 @@ class FrontOrderController extends Controller
 
     public function cancel(Order $order)
     {
-        if ($order->user_id != auth()->id()) {
+        if ($order->customer_id != auth('customer')->id()) {
             return back()->with('error', '无权操作');
         }
 
