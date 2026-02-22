@@ -111,3 +111,85 @@ php artisan serve
 - Windows 环境下使用 phpstudy PRO 简化环境配置
 - spatie/laravel-permission v7.x 需要 PHP 8.3+，当前环境使用 v6.24.1
 - 数据库名需要在 MySQL 中提前创建，或让 Laravel 自动创建
+
+## 常见问题
+
+### 1. Eloquent 关联指定外键
+
+当模型关联的外键不是默认命名时，需要手动指定：
+
+```php
+// 默认：外键为 category_id
+public function category(): BelongsTo
+{
+    return $this->belongsTo(ProductCategory::class);
+}
+
+// 指定外键
+public function category(): BelongsTo
+{
+    return $this->belongsTo(ProductCategory::class, 'category_id');
+}
+
+// 指定外键和关联键
+public function products(): HasMany
+{
+    return $this->hasMany(Product::class, 'category_id', 'id');
+}
+```
+
+### 2. 菜单权限动态显示
+
+根据用户权限动态显示/隐藏侧边栏菜单：
+
+```php
+$user = Auth::user();
+$canViewUsers = $user && ($user->can('user list') || $user->hasRole('admin'));
+$canViewProducts = $user && ($user->can('product list') || $user->hasRole('admin'));
+
+@if($canViewUsers)
+<a href="{{ route('users.index') }}">用户管理</a>
+@endif
+```
+
+### 3. 数据库唯一约束修改
+
+修改已有唯一约束时，需要先删除外键约束：
+
+```php
+Schema::table('product_attribute_values', function (Blueprint $table) {
+    $table->dropForeign(['product_id']);
+    $table->dropForeign(['attribute_id']);
+    $table->dropForeign(['attribute_value_id']);
+    $table->dropUnique(['product_id', 'attribute_id']);
+    $table->index(['product_id', 'attribute_id']);
+    // 重新添加外键
+    $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+});
+```
+
+### 4. API 路由名称冲突
+
+Web 和 API 路由使用相同名称时，需要给 API 路由添加前缀：
+
+```php
+// api.php
+Route::apiResource('users', UserApiController::class)->names('api.users');
+// 路由名称变为：api.users.index, api.users.store 等
+```
+
+### 5. Spatie Permission 权限检查
+
+```php
+// 检查单个权限
+$user->can('post list');
+
+// 检查角色
+$user->hasRole('admin');
+
+// 检查多个权限（满足其一）
+$user->can(['post create', 'post edit']);
+
+// 检查多个权限（全部满足）
+$user->can(['post create', 'post edit'], true);
+```

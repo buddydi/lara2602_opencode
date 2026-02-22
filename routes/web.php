@@ -12,10 +12,31 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ProductAttributeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductSkuController;
+use App\Http\Controllers\FrontHomeController;
+use App\Http\Controllers\FrontCartController;
+use App\Http\Controllers\FrontAddressController;
+use App\Http\Controllers\FrontOrderController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', [FrontHomeController::class, 'index'])->name('home');
+Route::get('/products', [FrontHomeController::class, 'products'])->name('products.index');
+Route::get('/products/{product}', [FrontHomeController::class, 'productDetail'])->name('products.detail');
+
+Route::middleware('auth')->group(function () {
+    // 购物车
+    Route::get('/cart', [FrontCartController::class, 'index'])->name('cart.index');
+    Route::post('/cart', [FrontCartController::class, 'add'])->name('cart.add');
+    Route::patch('/cart/{cartItem}', [FrontCartController::class, 'update'])->name('cart.update');
+    Route::delete('/cart/{cartItem}', [FrontCartController::class, 'destroy'])->name('cart.destroy');
+    
+    // 收货地址
+    Route::resource('addresses', FrontAddressController::class);
+    
+    // 订单
+    Route::get('/orders', [FrontOrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{order}', [FrontOrderController::class, 'show'])->name('orders.show');
+    Route::post('/orders', [FrontOrderController::class, 'store'])->name('orders.store');
+    Route::patch('/orders/{order}/cancel', [FrontOrderController::class, 'cancel'])->name('orders.cancel');
 });
 
 Route::middleware('auth')->group(function () {
