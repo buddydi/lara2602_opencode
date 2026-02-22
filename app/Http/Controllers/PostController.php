@@ -29,7 +29,11 @@ class PostController extends Controller
             'status' => 'required|in:draft,published,archived',
         ]);
 
-        $validated['slug'] = Str::slug($validated['title']);
+        $slug = Str::slug($validated['title']);
+        if (Post::where('slug', $slug)->exists()) {
+            return back()->withInput()->with('error', '文章标题已存在，请使用其他标题');
+        }
+        $validated['slug'] = $slug;
         $validated['user_id'] = auth()->id();
 
         if ($request->hasFile('cover_image')) {
@@ -64,7 +68,13 @@ class PostController extends Controller
             'status' => 'required|in:draft,published,archived',
         ]);
 
-        $validated['slug'] = Str::slug($validated['title']);
+        if (isset($validated['title'])) {
+            $slug = Str::slug($validated['title']);
+            if (Post::where('slug', $slug)->where('id', '!=', $post->id)->exists()) {
+                return back()->withInput()->with('error', '文章标题已存在，请使用其他标题');
+            }
+            $validated['slug'] = $slug;
+        }
 
         if ($request->hasFile('cover_image')) {
             if ($post->cover_image) {

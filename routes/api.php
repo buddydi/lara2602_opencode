@@ -34,13 +34,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('comments/{comment}/approve', [CommentApiController::class, 'approve']);
     Route::post('comments/{comment}/reject', [CommentApiController::class, 'reject']);
     
-    Route::apiResource('roles', RoleApiController::class)->except(['create', 'edit']);
+    Route::apiResource('roles', RoleApiController::class)->except(['create', 'edit'])->names('api.roles');
     Route::get('roles-permissions', [RoleApiController::class, 'permissions']);
     
-    Route::apiResource('permissions', PermissionApiController::class)->except(['create', 'edit']);
+    Route::apiResource('permissions', PermissionApiController::class)->except(['create', 'edit'])->names('api.permissions');
     Route::get('permissions-groups', [PermissionApiController::class, 'groups']);
     
-    Route::apiResource('users', UserApiController::class);
+    Route::apiResource('users', UserApiController::class)->names('api.users');
     Route::post('users/{user}/assign-role', [UserApiController::class, 'assignRole']);
     Route::post('users/{user}/revoke-role', [UserApiController::class, 'revokeRole']);
     Route::post('users/{user}/give-permission', [UserApiController::class, 'givePermission']);

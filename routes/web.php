@@ -7,6 +7,11 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProductCategoryController;
+use App\Http\Controllers\BrandController;
+use App\Http\Controllers\ProductAttributeController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductSkuController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -16,9 +21,16 @@ Route::get('/', function () {
 Route::middleware('auth')->group(function () {
     Route::resource('posts', PostController::class);
     Route::resource('categories', CategoryController::class);
-    Route::resource('roles', RoleController::class)->middleware('can:role list');
-    Route::resource('permissions', PermissionController::class)->middleware('can:permission list');
-    Route::resource('users', UserController::class)->middleware('can:user list');
+    Route::resource('roles', RoleController::class);
+    Route::resource('permissions', PermissionController::class);
+    Route::resource('users', UserController::class);
+    
+    // 商品模块
+    Route::resource('product-categories', ProductCategoryController::class);
+    Route::resource('brands', BrandController::class);
+    Route::resource('product-attributes', ProductAttributeController::class);
+    Route::resource('products', ProductController::class);
+    Route::resource('products.skus', ProductSkuController::class);
     
     Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('posts.comments.store');
     Route::delete('/posts/{post}/comments/{comment}', [CommentController::class, 'destroy'])->name('posts.comments.destroy');

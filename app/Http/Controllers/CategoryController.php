@@ -29,7 +29,11 @@ class CategoryController extends Controller
             'order' => 'integer|min:0',
         ]);
 
-        $validated['slug'] = Str::slug($validated['name']);
+        $slug = Str::slug($validated['name']);
+        if (Category::where('slug', $slug)->exists()) {
+            return back()->withInput()->with('error', '分类名称已存在，请使用其他名称');
+        }
+        $validated['slug'] = $slug;
 
         Category::create($validated);
 
@@ -56,7 +60,13 @@ class CategoryController extends Controller
             'order' => 'integer|min:0',
         ]);
 
-        $validated['slug'] = Str::slug($validated['name']);
+        if (isset($validated['name'])) {
+            $slug = Str::slug($validated['name']);
+            if (Category::where('slug', $slug)->where('id', '!=', $category->id)->exists()) {
+                return back()->withInput()->with('error', '分类名称已存在，请使用其他名称');
+            }
+            $validated['slug'] = $slug;
+        }
 
         $category->update($validated);
 

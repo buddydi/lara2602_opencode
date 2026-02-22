@@ -110,7 +110,18 @@ use Illuminate\Support\Facades\Auth; ?>
     ?>
     <div class="container">
         <div class="sidebar" id="sidebar">
-            <?php $user = Auth::user(); ?>
+            <?php
+                $user = Auth::user();
+                $canViewUsers = $user && ($user->can('user list') || $user->hasRole('admin'));
+                $canViewRoles = $user && ($user->can('role list') || $user->hasRole('admin'));
+                $canViewPermissions = $user && ($user->can('permission list') || $user->hasRole('admin'));
+                $canViewPosts = $user && ($user->can('post list') || $user->hasRole('admin'));
+                $canViewCategories = $user && ($user->can('category list') || $user->hasRole('admin'));
+                $canViewProductCategories = $user && ($user->can('product-category list') || $user->hasRole('admin'));
+                $canViewBrands = $user && ($user->can('brand list') || $user->hasRole('admin'));
+                $canViewProductAttributes = $user && ($user->can('product-attribute list') || $user->hasRole('admin'));
+                $canViewProducts = $user && ($user->can('product list') || $user->hasRole('admin'));
+            ?>
             @if($user)
             <div class="user-info">
                 <div class="user-name">{{ $user->name }}</div>
@@ -127,31 +138,69 @@ use Illuminate\Support\Facades\Auth; ?>
                 <span class="menu-text">仪表盘</span>
                 <span class="tooltip">仪表盘</span>
             </a>
+            @if($canViewPosts)
             <a href="{{ route('posts.index') }}" {{ str_starts_with($currentRoute, 'posts') ? 'class=active' : '' }}>
                 <span class="menu-icon">文</span>
                 <span class="menu-text">文章管理</span>
                 <span class="tooltip">文章管理</span>
             </a>
+            @endif
+            @if($canViewCategories)
             <a href="{{ route('categories.index') }}" {{ str_starts_with($currentRoute, 'categories') ? 'class=active' : '' }}>
                 <span class="menu-icon">分</span>
                 <span class="menu-text">分类管理</span>
                 <span class="tooltip">分类管理</span>
             </a>
+            @endif
+            @if($canViewUsers)
             <a href="{{ route('users.index') }}" {{ str_starts_with($currentRoute, 'users') ? 'class=active' : '' }}>
                 <span class="menu-icon">用</span>
                 <span class="menu-text">用户管理</span>
                 <span class="tooltip">用户管理</span>
             </a>
+            @endif
+            @if($canViewRoles)
             <a href="{{ route('roles.index') }}" {{ str_starts_with($currentRoute, 'roles') ? 'class=active' : '' }}>
                 <span class="menu-icon">角</span>
                 <span class="menu-text">角色管理</span>
                 <span class="tooltip">角色管理</span>
             </a>
+            @endif
+            @if($canViewPermissions)
             <a href="{{ route('permissions.index') }}" {{ str_starts_with($currentRoute, 'permissions') ? 'class=active' : '' }}>
                 <span class="menu-icon">权</span>
                 <span class="menu-text">权限管理</span>
                 <span class="tooltip">权限管理</span>
             </a>
+            @endif
+            @if($canViewProductCategories)
+            <a href="{{ route('product-categories.index') }}" {{ str_starts_with($currentRoute, 'product-categories') ? 'class=active' : '' }}>
+                <span class="menu-icon">商</span>
+                <span class="menu-text">商品分类</span>
+                <span class="tooltip">商品分类</span>
+            </a>
+            @endif
+            @if($canViewBrands)
+            <a href="{{ route('brands.index') }}" {{ str_starts_with($currentRoute, 'brands') ? 'class=active' : '' }}>
+                <span class="menu-icon">品</span>
+                <span class="menu-text">品牌管理</span>
+                <span class="tooltip">品牌管理</span>
+            </a>
+            @endif
+            @if($canViewProductAttributes)
+            <a href="{{ route('product-attributes.index') }}" {{ str_starts_with($currentRoute, 'product-attributes') ? 'class=active' : '' }}>
+                <span class="menu-icon">属</span>
+                <span class="menu-text">商品属性</span>
+                <span class="tooltip">商品属性</span>
+            </a>
+            @endif
+            @if($canViewProducts)
+            <a href="{{ route('products.index') }}" {{ str_starts_with($currentRoute, 'products') ? 'class=active' : '' }}>
+                <span class="menu-icon">货</span>
+                <span class="menu-text">商品管理</span>
+                <span class="tooltip">商品管理</span>
+            </a>
+            @endif
         </div>
         <div class="main" id="main">
             @if (session('success'))
