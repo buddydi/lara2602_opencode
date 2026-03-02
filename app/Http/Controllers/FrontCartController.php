@@ -10,7 +10,11 @@ class FrontCartController extends Controller
 {
     public function index()
     {
-        $cartItems = auth('customer')->user()->cartItems()->with(['product', 'sku'])->get();
+        if (auth('customer')->check()) {
+            $cartItems = auth('customer')->user()->cartItems()->with(['product', 'sku'])->get();
+        } else {
+            $cartItems = collect([]);
+        }
         $total = $cartItems->sum(fn($item) => ($item->sku ? $item->sku->price : $item->product->price) * $item->quantity);
         
         return view('front.cart', compact('cartItems', 'total'));
@@ -18,6 +22,10 @@ class FrontCartController extends Controller
 
     public function add(Request $request)
     {
+        if (!auth('customer')->check()) {
+            return redirect()->route('customer.login')->with('error', '请先登录');
+        }
+
         $request->validate([
             'product_id' => 'required|exists:products,id',
             'sku_id' => 'nullable|exists:product_skus,id',
@@ -47,6 +55,10 @@ class FrontCartController extends Controller
 
     public function update(Request $request, CartItem $cartItem)
     {
+        if (!auth('customer')->check()) {
+            return redirect()->route('customer.login')->with('error', '请先登录');
+        }
+
         if ($cartItem->customer_id != auth('customer')->id()) {
             return back()->with('error', '无权操作');
         }
@@ -67,6 +79,10 @@ class FrontCartController extends Controller
 
     public function destroy(CartItem $cartItem)
     {
+        if (!auth('customer')->check()) {
+            return redirect()->route('customer.login')->with('error', '请先登录');
+        }
+
         if ($cartItem->customer_id != auth('customer')->id()) {
             return back()->with('error', '无权操作');
         }

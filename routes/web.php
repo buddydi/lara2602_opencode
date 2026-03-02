@@ -32,9 +32,11 @@ Route::middleware('guest:customer')->group(function () {
 });
 Route::post('/customer/logout', [CustomerAuthController::class, 'logout'])->name('customer.logout');
 
+// 购物车页面（公开，游客可查看）
+Route::get('/cart', [FrontCartController::class, 'index'])->name('cart.index');
+
 Route::middleware('customer')->group(function () {
-    // 购物车
-    Route::get('/cart', [FrontCartController::class, 'index'])->name('cart.index');
+    // 购物车操作（需要登录）
     Route::post('/cart', [FrontCartController::class, 'add'])->name('cart.add');
     Route::patch('/cart/{cartItem}', [FrontCartController::class, 'update'])->name('cart.update');
     Route::delete('/cart/{cartItem}', [FrontCartController::class, 'destroy'])->name('cart.destroy');
