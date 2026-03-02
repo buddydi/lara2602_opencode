@@ -16,6 +16,32 @@ class FrontOrderController extends Controller
         return view('front.order.index', compact('orders'));
     }
 
+    public function checkout(Request $request)
+    {
+        $cartItemIds = $request->cart_item_ids ?? [];
+        
+        if (empty($cartItemIds)) {
+            return redirect()->route('cart.index')->with('error', '请选择要结算的商品');
+        }
+
+        $cartItems = CartItem::whereIn('id', $cartItemIds)
+            ->where('customer_id', auth('customer')->id())
+            ->with(['product', 'sku'])
+            ->get();
+
+        if ($cartItems->isEmpty()) {
+            return redirect()->route('cart.index')->with('error', '购物车为空');
+        }
+
+        $addresses = auth('customer')->user()->addresses()->orderBy('is_default', 'desc')->get();
+        $subtotal = $cartItems->sum(function ($item) {
+            $price = $item->sku ? $item->sku->price : $item->product->price;
+            return $price * $item->quantity;
+        });
+
+        return view('front.order.checkout', compact('cartItems', 'addresses', 'subtotal'));
+    }
+
     public function show(Order $order)
     {
         if ($order->customer_id != auth('customer')->id()) {

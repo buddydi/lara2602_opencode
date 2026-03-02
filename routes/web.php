@@ -44,6 +44,7 @@ Route::middleware('customer')->group(function () {
     
     // 订单
     Route::get('/orders', [FrontOrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/checkout', [FrontOrderController::class, 'checkout'])->name('orders.checkout');
     Route::get('/orders/{order}', [FrontOrderController::class, 'show'])->name('orders.show');
     Route::post('/orders', [FrontOrderController::class, 'store'])->name('orders.store');
     Route::patch('/orders/{order}/cancel', [FrontOrderController::class, 'cancel'])->name('orders.cancel');

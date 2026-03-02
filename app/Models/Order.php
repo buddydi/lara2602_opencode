@@ -13,15 +13,18 @@ class Order extends Model
         'address_id',
         'order_no',
         'total_amount',
+        'shipping_fee',
         'pay_amount',
         'freight',
         'product_count',
         'status',
         'pay_method',
+        'payment_method',
         'paid_at',
         'shipping_no',
         'shipped_at',
         'remark',
+        'shipping_method',
     ];
 
     protected function casts(): array
