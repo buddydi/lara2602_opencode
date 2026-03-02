@@ -57,7 +57,7 @@ Route::middleware('auth')->group(function () {
     // 后台首页
     Route::get('/admin', function () {
         return view('dashboard');
-    })->name('dashboard');
+    })->name('admin.dashboard');
     
     // 后台页面（统一 /admin 前缀）
     Route::prefix('admin')->as('admin.')->group(function () {
