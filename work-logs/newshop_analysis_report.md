@@ -98,27 +98,81 @@
 
 ## 路由治理与端点划分
 
-目的：明确客户端、游客端、管理员端路由的差异、前缀与认证策略，确保阶段四及后续开发在端点层面有清晰的治理边界。
-端点分类与归属
-客户端/前端用户端点（需认证，使用 customer.guard）
-登录/注册：/customer/login、/customer/register
-购物车：/cart（GET/POST）、/cart/{cartItem}（PATCH/DELETE）
-收货地址：/addresses
-订单：/orders
-商品浏览：/products、/products/{product}（公开）
-游客端端点（Guest，公开）
-商品：/products、/products/{product}
-分类：/categories、/categories/{category}
-管理端（Admin，/admin 前缀，需认证）
-商品/分类/品牌/属性等管理：/admin/products、/admin/product-categories、/admin/brands、/admin/product-attributes
-订单管理：/admin/orders
-客户管理：/admin/customers
-系统设置：/admin/settings
-路由前缀与 Guard 对照
-客户端端点：/customer/xxx，Guard: customer
-游客端：公开/无前缀，Guard: web 或 guest
-管理端：/admin/xxx，Guard: admin，或基于角色的权限中台
+### 目的
+明确客户端、游客端、管理员端路由的差异、前缀与认证策略，确保阶段四及后续开发在端点层面有清晰的治理边界。
 
+### 端点分类与归属
+
+#### 1. 客户端/前端用户端点（需认证，使用 customer.guard）
+
+| 端点 | 路径 | 说明 |
+|------|------|------|
+| 客户登录 | /customer/login | 需认证 |
+| 客户注册 | /customer/register | 需认证 |
+| 客户退出 | /customer/logout | 需认证 |
+| 购物车 | /cart | 需认证 |
+| 购物车操作 | /cart/{id} (PATCH/DELETE) | 需认证 |
+| 收货地址 | /addresses | 需认证 |
+| 订单 | /orders | 需认证 |
+| 商品浏览 | /products、/products/{product} | 公开 |
+
+#### 2. 游客端端点（Guest，公开）
+
+| 端点 | 路径 | 说明 |
+|------|------|------|
+| 商品列表 | /products | 公开 |
+| 商品详情 | /products/{product} | 公开 |
+| 分类列表 | /categories | 公开 |
+| 分类详情 | /categories/{category} | 公开 |
+
+#### 3. 管理端（Admin，/admin 前缀，需认证）
+
+| 端点 | 路径 | 说明 |
+|------|------|------|
+| 后台登录 | /admin/login | 需认证 |
+| 商品管理 | /admin/products | 需认证 |
+| 分类管理 | /admin/product-categories | 需认证 |
+| 品牌管理 | /admin/brands | 需认证 |
+| 属性管理 | /admin/product-attributes | 需认证 |
+| SKU管理 | /admin/product-skus | 需认证 |
+| 订单管理 | /admin/orders | 需认证 |
+| 客户管理 | /admin/customers | 需认证 |
+| 系统设置 | /admin/settings | 需认证 |
+
+### 路由前缀与 Guard 对照
+
+| 端点类型 | 路由前缀 | Guard | 认证方式 |
+|----------|----------|-------|----------|
+| 客户端 | /customer/xxx | customer | Session |
+| 游客端 | / (无前缀) | web/guest | 公开 |
+| 管理端 | /admin/xxx | admin | Session + 权限控制 |
+
+### 变更治理规则
+
+凡涉及路由/端点相关的变更，必须遵循以下规则：
+
+1. **变更记录**：所有路由变更需记录到 PRD，包含：
+   - 变更原因
+   - 影响范围（哪些端点受影响）
+   - 验收标准
+   - 审核人
+
+2. **端点命名规范**：
+   - 客户端路由：`/customer/xxx`
+   - 管理端路由：`/admin/xxx`
+   - 公开路由：无前缀或 `/api/xxx`
+
+3. **认证要求**：
+   - 管理端必须使用 `/admin` 前缀
+   - 客户端认证使用 `customer` guard
+   - 游客端尽量保持公开
+
+### 已完成阶段三的端点治理（示例）
+
+- 客户端/游客端：商品浏览、注册/登录、购物车入口、地址/订单入口等
+- 管理端：后台路由带 /admin 前缀，管理员相关功能独立路由，配合权限系统
+
+---
 
 ## 三、阶段详解
 
