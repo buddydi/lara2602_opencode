@@ -59,6 +59,10 @@ Route::middleware('auth')->group(function () {
         return view('dashboard');
     })->name('admin.dashboard');
     
+    Route::get('/admin/dashboard', function () {
+        return view('dashboard');
+    })->name('admin.dashboard');
+    
     // 后台页面（统一 /admin 前缀）
     Route::prefix('admin')->as('admin.')->group(function () {
         Route::resource('posts', PostController::class);
