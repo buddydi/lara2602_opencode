@@ -96,6 +96,7 @@
 
 <script>
 let selectedSkuId = null;
+const isCustomerLoggedIn = {{ auth('customer')->check() ? 'true' : 'false' }};
 
 function changeQuantity(delta) {
     const input = document.getElementById('quantity');
@@ -118,6 +119,13 @@ if (document.querySelector('.attr-value')) {
 }
 
 function addToCart(productId) {
+    if (!isCustomerLoggedIn) {
+        if (confirm('请先登录后加入购物车，是否立即登录？')) {
+            window.location.href = '{{ route("customer.login") }}';
+        }
+        return;
+    }
+    
     document.getElementById('cart-product-id').value = productId;
     document.getElementById('cart-quantity').value = document.getElementById('quantity').value;
     document.getElementById('cart-form').submit();
