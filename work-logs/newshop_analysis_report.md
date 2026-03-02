@@ -4806,3 +4806,88 @@ class LogisticsService
 
 ### 路由治理与端点划分 (追加)
 - 端点治理草案已就绪，你可以在 PRD 中正式落地。
+
+---
+
+## 阶段三完成状态（2026-03-03）
+
+### 已完成功能
+
+| 功能 | 状态 | 说明 |
+|------|------|------|
+| 前后端用户分离 | ✅ | customers表 + customer guard |
+| 客户登录/注册 | ✅ | /customer/login, /customer/register |
+| 商品浏览 | ✅ | /products, /products/{id} |
+| 购物车 | ✅ | 数据库存储、数量修改、删除 |
+| 收货地址 | ✅ | CRUD + 默认地址 |
+| 订单管理 | ✅ | 下单、列表、详情、取消 |
+
+### 访问地址（阶段三已完成）
+
+| 页面 | 地址 |
+|------|------|
+| 首页 | http://test.lara2602.local/ |
+| 商品列表 | http://test.lara2602.local/products |
+| 客户登录 | http://test.lara2602.local/customer/login |
+| 客户注册 | http://test.lara2602.local/customer/register |
+| 后台登录 | http://test.lara2602.local/admin/login |
+| 购物车 | http://test.lara2602.local/cart |
+| 收货地址 | http://test.lara2602.local/addresses |
+| 我的订单 | http://test.lara2602.local/orders |
+
+### 阶段三交付物清单
+
+#### 数据库迁移
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+
+#### 模型
+- 
+- 
+- 
+- 
+- 
+
+#### 控制器
+- 
+- 
+- 
+- 
+- 
+
+#### 视图
+- 
+- 
+
+---
+
+## 阶段三完成状态（2026-03-03）
+
+### 已完成功能
+
+| 功能 | 状态 | 说明 |
+|------|------|------|
+| 前后端用户分离 | ✅ | customers表 + customer guard |
+| 客户登录/注册 | ✅ | /customer/login, /customer/register |
+| 商品浏览 | ✅ | /products, /products/{id} |
+| 购物车 | ✅ | 数据库存储、数量修改、删除 |
+| 收货地址 | ✅ | CRUD + 默认地址 |
+| 订单管理 | ✅ | 下单、列表、详情、取消 |
+
+### 访问地址（阶段三已完成）
+
+| 页面 | 地址 |
+|------|------|
+| 首页 | http://test.lara2602.local/ |
+| 商品列表 | http://test.lara2602.local/products |
+| 客户登录 | http://test.lara2602.local/customer/login |
+| 客户注册 | http://test.lara2602.local/customer/register |
+| 后台登录 | http://test.lara2602.local/admin/login |
+| 购物车 | http://test.lara2602.local/cart |
+| 收货地址 | http://test.lara2602.local/addresses |
+| 我的订单 | http://test.lara2602.local/orders |
