@@ -8,6 +8,19 @@ use App\Http\Controllers\Api\CommentApiController;
 use App\Http\Controllers\Api\RoleApiController;
 use App\Http\Controllers\Api\PermissionApiController;
 use App\Http\Controllers\Api\UserApiController;
+use App\Http\Controllers\Api\ProductController;
+
+// 产品API（公开）
+Route::get('products', [ProductController::class, 'index']);
+Route::get('products/featured', [ProductController::class, 'featured']);
+Route::get('products/search', [ProductController::class, 'search']);
+Route::get('products/{id}', [ProductController::class, 'show']);
+Route::get('products/category/{categoryId}', [ProductController::class, 'byCategory']);
+
+// 分类API（公开）
+Route::get('categories', [CategoryApiController::class, 'index']);
+Route::get('categories-tree', [CategoryApiController::class, 'tree']);
+Route::get('categories/{category}', [CategoryApiController::class, 'show']);
 
 Route::prefix('auth')->group(function () {
     Route::post('register', [AuthController::class, 'register']);
