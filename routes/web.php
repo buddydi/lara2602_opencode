@@ -54,11 +54,12 @@ Route::middleware('customer')->group(function () {
 
 // 后台管理路由（需要 /admin 前缀）
 Route::middleware('auth')->group(function () {
-    // 后台首页
+    // /admin 跳转到 /admin/dashboard
     Route::get('/admin', function () {
-        return view('dashboard');
-    })->name('admin.dashboard');
+        return redirect()->route('admin.dashboard');
+    });
     
+    // 后台首页
     Route::get('/admin/dashboard', function () {
         return view('dashboard');
     })->name('admin.dashboard');
