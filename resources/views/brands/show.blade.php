@@ -1,4 +1,4 @@
-<?php $currentRoute = 'brands'; ?>
+<?php $currentRoute = 'admin.brands'; ?>
 @extends('admin_layout')
 
 @section('title', '品牌详情')
@@ -47,6 +47,6 @@
     </tr>
 </table>
 
-<a href="{{ route('brands.edit', $brand) }}" class="btn btn-primary">编辑</a>
-<a href="{{ route('brands.index') }}" class="btn btn-secondary">返回</a>
+<a href="{{ route('admin.brands.edit', $brand) }}" class="btn btn-primary">编辑</a>
+<a href="{{ route('admin.brands.index') }}" class="btn btn-secondary">返回</a>
 @endsection

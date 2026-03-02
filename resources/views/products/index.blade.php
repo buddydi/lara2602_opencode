@@ -1,4 +1,4 @@
-<?php $currentRoute = 'products'; ?>
+<?php $currentRoute = 'admin.products'; ?>
 @extends('admin_layout')
 
 @section('title', '商品管理')
@@ -26,7 +26,7 @@
         <option value="archived" {{ request('status') == 'archived' ? 'selected' : '' }}>已归档</option>
     </select>
     <button type="submit" class="btn btn-primary">筛选</button>
-    <a href="{{ route('products.create') }}" class="btn btn-primary">新建商品</a>
+    <a href="{{ route('admin.products.create') }}" class="btn btn-primary">新建商品</a>
 </form>
 
 <table>
@@ -65,10 +65,10 @@
                 @endswitch
             </td>
             <td>
-                <a href="{{ route('products.show', $product) }}" class="btn btn-outline">查看</a>
-                <a href="{{ route('products.edit', $product) }}" class="btn btn-secondary">编辑</a>
-                <a href="{{ route('products.skus.index', $product) }}" class="btn btn-outline">SKU</a>
-                <form action="{{ route('products.destroy', $product) }}" method="POST" style="display:inline;">
+                <a href="{{ route('admin.products.show', $product) }}" class="btn btn-outline">查看</a>
+                <a href="{{ route('admin.products.edit', $product) }}" class="btn btn-secondary">编辑</a>
+                <a href="{{ route('admin.products.skus.index', $product) }}" class="btn btn-outline">SKU</a>
+                <form action="{{ route('admin.products.destroy', $product) }}" method="POST" style="display:inline;">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger" onclick="return confirm('确定删除?')">删除</button>

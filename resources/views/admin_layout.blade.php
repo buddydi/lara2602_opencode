@@ -128,6 +128,7 @@ use Illuminate\Support\Facades\Auth; ?>
                 <div class="user-role">{{ $user->roles->pluck('name')->implode(', ') ?: '无角色' }}</div>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
+                    <input type="hidden" name="redirect" value="/admin/login">
                     <button type="submit" class="logout-btn" style="width: 100%; border: none; cursor: pointer;">退出登录</button>
                 </form>
             </div>
@@ -174,28 +175,28 @@ use Illuminate\Support\Facades\Auth; ?>
             </a>
             @endif
             @if($canViewProductCategories)
-            <a href="{{ route('product-categories.index') }}" {{ str_starts_with($currentRoute, 'product-categories') ? 'class=active' : '' }}>
+            <a href="{{ route('admin.product-categories.index') }}" {{ str_starts_with($currentRoute, 'product-categories') ? 'class=active' : '' }}>
                 <span class="menu-icon">商</span>
                 <span class="menu-text">商品分类</span>
                 <span class="tooltip">商品分类</span>
             </a>
             @endif
             @if($canViewBrands)
-            <a href="{{ route('brands.index') }}" {{ str_starts_with($currentRoute, 'brands') ? 'class=active' : '' }}>
+            <a href="{{ route('admin.brands.index') }}" {{ str_starts_with($currentRoute, 'brands') ? 'class=active' : '' }}>
                 <span class="menu-icon">品</span>
                 <span class="menu-text">品牌管理</span>
                 <span class="tooltip">品牌管理</span>
             </a>
             @endif
             @if($canViewProductAttributes)
-            <a href="{{ route('product-attributes.index') }}" {{ str_starts_with($currentRoute, 'product-attributes') ? 'class=active' : '' }}>
+            <a href="{{ route('admin.product-attributes.index') }}" {{ str_starts_with($currentRoute, 'product-attributes') ? 'class=active' : '' }}>
                 <span class="menu-icon">属</span>
                 <span class="menu-text">商品属性</span>
                 <span class="tooltip">商品属性</span>
             </a>
             @endif
             @if($canViewProducts)
-            <a href="{{ route('products.index') }}" {{ str_starts_with($currentRoute, 'products') ? 'class=active' : '' }}>
+            <a href="{{ route('admin.products.index') }}" {{ str_starts_with($currentRoute, 'products') ? 'class=active' : '' }}>
                 <span class="menu-icon">货</span>
                 <span class="menu-text">商品管理</span>
                 <span class="tooltip">商品管理</span>

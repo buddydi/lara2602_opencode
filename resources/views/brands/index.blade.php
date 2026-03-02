@@ -1,4 +1,4 @@
-<?php $currentRoute = 'brands'; ?>
+<?php $currentRoute = 'admin.brands'; ?>
 @extends('admin_layout')
 
 @section('title', '品牌管理')
@@ -6,7 +6,7 @@
 @section('content')
 <div class="section-title">品牌管理</div>
 
-<a href="{{ route('brands.create') }}" class="btn btn-primary">新建品牌</a>
+<a href="{{ route('admin.brands.create') }}" class="btn btn-primary">新建品牌</a>
 
 <table>
     <thead>
@@ -42,9 +42,9 @@
                 @endif
             </td>
             <td>
-                <a href="{{ route('brands.show', $brand) }}" class="btn btn-outline">查看</a>
-                <a href="{{ route('brands.edit', $brand) }}" class="btn btn-secondary">编辑</a>
-                <form action="{{ route('brands.destroy', $brand) }}" method="POST" style="display:inline;">
+                <a href="{{ route('admin.brands.show', $brand) }}" class="btn btn-outline">查看</a>
+                <a href="{{ route('admin.brands.edit', $brand) }}" class="btn btn-secondary">编辑</a>
+                <form action="{{ route('admin.brands.destroy', $brand) }}" method="POST" style="display:inline;">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger" onclick="return confirm('确定删除?')">删除</button>

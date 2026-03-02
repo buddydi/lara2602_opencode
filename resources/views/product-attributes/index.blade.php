@@ -1,4 +1,4 @@
-<?php $currentRoute = 'product-attributes'; ?>
+<?php $currentRoute = 'admin.product-attributes'; ?>
 @extends('admin_layout')
 
 @section('title', '商品属性管理')
@@ -6,7 +6,7 @@
 @section('content')
 <div class="section-title">商品属性管理</div>
 
-<a href="{{ route('product-attributes.create') }}" class="btn btn-primary">新建属性</a>
+<a href="{{ route('admin.product-attributes.create') }}" class="btn btn-primary">新建属性</a>
 
 <table>
     <thead>
@@ -42,8 +42,8 @@
                 @endforeach
             </td>
             <td>
-                <a href="{{ route('product-attributes.edit', $attr) }}" class="btn btn-secondary">编辑</a>
-                <form action="{{ route('product-attributes.destroy', $attr) }}" method="POST" style="display:inline;">
+                <a href="{{ route('admin.product-attributes.edit', $attr) }}" class="btn btn-secondary">编辑</a>
+                <form action="{{ route('admin.product-attributes.destroy', $attr) }}" method="POST" style="display:inline;">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger" onclick="return confirm('确定删除?')">删除</button>

@@ -1,4 +1,4 @@
-<?php $currentRoute = 'products'; ?>
+<?php $currentRoute = 'admin.products'; ?>
 @extends('admin_layout')
 
 @section('title', '新建商品')
@@ -6,7 +6,7 @@
 @section('content')
 <div class="section-title">新建商品</div>
 
-<form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
+<form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
     
     <div class="form-group">
@@ -91,6 +91,6 @@
     @endif
     
     <button type="submit" class="btn btn-primary">创建</button>
-    <a href="{{ route('products.index') }}" class="btn btn-secondary">返回</a>
+    <a href="{{ route('admin.products.index') }}" class="btn btn-secondary">返回</a>
 </form>
 @endsection

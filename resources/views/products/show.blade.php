@@ -1,4 +1,4 @@
-<?php $currentRoute = 'products'; ?>
+<?php $currentRoute = 'admin.products'; ?>
 @extends('admin_layout')
 
 @section('title', '商品详情')
@@ -51,7 +51,7 @@
     </tr>
 </table>
 
-<a href="{{ route('products.edit', $product) }}" class="btn btn-primary">编辑</a>
-<a href="{{ route('products.skus.index', $product) }}" class="btn btn-primary">管理SKU</a>
-<a href="{{ route('products.index') }}" class="btn btn-secondary">返回</a>
+<a href="{{ route('admin.products.edit', $product) }}" class="btn btn-primary">编辑</a>
+<a href="{{ route('admin.products.skus.index', $product) }}" class="btn btn-primary">管理SKU</a>
+<a href="{{ route('admin.products.index') }}" class="btn btn-secondary">返回</a>
 @endsection

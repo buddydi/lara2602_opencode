@@ -1,4 +1,4 @@
-<?php $currentRoute = 'products'; ?>
+<?php $currentRoute = 'admin.products'; ?>
 @extends('admin_layout')
 
 @section('title', 'SKU管理 - ' . $product->name)
@@ -6,8 +6,8 @@
 @section('content')
 <div class="section-title">SKU管理 - {{ $product->name }}</div>
 
-<a href="{{ route('products.skus.create', $product) }}" class="btn btn-primary">新建SKU</a>
-<a href="{{ route('products.index') }}" class="btn btn-secondary">返回商品列表</a>
+<a href="{{ route('admin.products.skus.create', $product) }}" class="btn btn-primary">新建SKU</a>
+<a href="{{ route('admin.products.index') }}" class="btn btn-secondary">返回商品列表</a>
 
 <table>
     <thead>
@@ -39,8 +39,8 @@
                 @endif
             </td>
             <td>
-                <a href="{{ route('products.skus.edit', [$product, $sku]) }}" class="btn btn-secondary">编辑</a>
-                <form action="{{ route('products.skus.destroy', [$product, $sku]) }}" method="POST" style="display:inline;">
+                <a href="{{ route('admin.products.skus.edit', [$product, $sku]) }}" class="btn btn-secondary">编辑</a>
+                <form action="{{ route('admin.products.skus.destroy', [$product, $sku]) }}" method="POST" style="display:inline;">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger" onclick="return confirm('确定删除?')">删除</button>

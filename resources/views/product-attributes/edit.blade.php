@@ -1,4 +1,4 @@
-<?php $currentRoute = 'product-attributes'; ?>
+<?php $currentRoute = 'admin.product-attributes'; ?>
 @extends('admin_layout')
 
 @section('title', '编辑商品属性')
@@ -6,7 +6,7 @@
 @section('content')
 <div class="section-title">编辑商品属性</div>
 
-<form action="{{ route('product-attributes.update', $productAttribute) }}" method="POST">
+<form action="{{ route('admin.product-attributes.update', $productAttribute) }}" method="POST">
     @csrf
     @method('PUT')
     
@@ -49,7 +49,7 @@
     </div>
     
     <button type="submit" class="btn btn-primary">更新</button>
-    <a href="{{ route('product-attributes.index') }}" class="btn btn-secondary">返回</a>
+    <a href="{{ route('admin.product-attributes.index') }}" class="btn btn-secondary">返回</a>
 </form>
 
 <script>

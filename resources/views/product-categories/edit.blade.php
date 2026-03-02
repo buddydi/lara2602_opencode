@@ -1,4 +1,4 @@
-<?php $currentRoute = 'product-categories'; ?>
+<?php $currentRoute = 'admin.product-categories'; ?>
 @extends('admin_layout')
 
 @section('title', '编辑商品分类')
@@ -6,7 +6,7 @@
 @section('content')
 <div class="section-title">编辑商品分类</div>
 
-<form action="{{ route('product-categories.update', $productCategory) }}" method="POST" enctype="multipart/form-data">
+<form action="{{ route('admin.product-categories.update', $productCategory) }}" method="POST" enctype="multipart/form-data">
     @csrf
     @method('PUT')
     
@@ -54,6 +54,6 @@
     </div>
     
     <button type="submit" class="btn btn-primary">更新</button>
-    <a href="{{ route('product-categories.index') }}" class="btn btn-secondary">返回</a>
+    <a href="{{ route('admin.product-categories.index') }}" class="btn btn-secondary">返回</a>
 </form>
 @endsection

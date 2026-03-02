@@ -1,4 +1,4 @@
-<?php $currentRoute = 'brands'; ?>
+<?php $currentRoute = 'admin.brands'; ?>
 @extends('admin_layout')
 
 @section('title', '新建品牌')
@@ -6,7 +6,7 @@
 @section('content')
 <div class="section-title">新建品牌</div>
 
-<form action="{{ route('brands.store') }}" method="POST" enctype="multipart/form-data">
+<form action="{{ route('admin.brands.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
     
     <div class="form-group">
@@ -31,6 +31,6 @@
     </div>
     
     <button type="submit" class="btn btn-primary">创建</button>
-    <a href="{{ route('brands.index') }}" class="btn btn-secondary">返回</a>
+    <a href="{{ route('admin.brands.index') }}" class="btn btn-secondary">返回</a>
 </form>
 @endsection

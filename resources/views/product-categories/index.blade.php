@@ -1,4 +1,4 @@
-<?php $currentRoute = 'product-categories'; ?>
+<?php $currentRoute = 'admin.product-categories'; ?>
 @extends('admin_layout')
 
 @section('title', '商品分类管理')
@@ -6,7 +6,7 @@
 @section('content')
 <div class="section-title">商品分类管理</div>
 
-<a href="{{ route('product-categories.create') }}" class="btn btn-primary">新建分类</a>
+<a href="{{ route('admin.product-categories.create') }}" class="btn btn-primary">新建分类</a>
 
 <table>
     <thead>
@@ -43,9 +43,9 @@
             </td>
             <td>{{ $category->order }}</td>
             <td>
-                <a href="{{ route('product-categories.show', $category) }}" class="btn btn-outline">查看</a>
-                <a href="{{ route('product-categories.edit', $category) }}" class="btn btn-secondary">编辑</a>
-                <form action="{{ route('product-categories.destroy', $category) }}" method="POST" style="display:inline;">
+                <a href="{{ route('admin.product-categories.show', $category) }}" class="btn btn-outline">查看</a>
+                <a href="{{ route('admin.product-categories.edit', $category) }}" class="btn btn-secondary">编辑</a>
+                <form action="{{ route('admin.product-categories.destroy', $category) }}" method="POST" style="display:inline;">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger" onclick="return confirm('确定删除?')">删除</button>
@@ -69,8 +69,8 @@
                 </td>
                 <td>{{ $child->order }}</td>
                 <td>
-                    <a href="{{ route('product-categories.edit', $child) }}" class="btn btn-secondary">编辑</a>
-                    <form action="{{ route('product-categories.destroy', $child) }}" method="POST" style="display:inline;">
+                    <a href="{{ route('admin.product-categories.edit', $child) }}" class="btn btn-secondary">编辑</a>
+                    <form action="{{ route('admin.product-categories.destroy', $child) }}" method="POST" style="display:inline;">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger" onclick="return confirm('确定删除?')">删除</button>
