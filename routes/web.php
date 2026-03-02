@@ -52,34 +52,36 @@ Route::middleware('customer')->group(function () {
     Route::patch('/orders/{order}/cancel', [FrontOrderController::class, 'cancel'])->name('orders.cancel');
 });
 
+// 后台管理路由（需要 /admin 前缀）
 Route::middleware('auth')->group(function () {
-    Route::resource('posts', PostController::class);
-    Route::resource('categories', CategoryController::class);
-    Route::resource('roles', RoleController::class);
-    Route::resource('permissions', PermissionController::class);
-    Route::resource('users', UserController::class);
+    // 后台首页
+    Route::get('/admin', function () {
+        return view('dashboard');
+    })->name('dashboard');
     
-    // 商品模块（后台）
+    // 后台页面（统一 /admin 前缀）
     Route::prefix('admin')->as('admin.')->group(function () {
+        Route::resource('posts', PostController::class);
+        Route::resource('categories', CategoryController::class);
+        Route::resource('roles', RoleController::class);
+        Route::resource('permissions', PermissionController::class);
+        Route::resource('users', UserController::class);
+        
+        // 商品模块
         Route::resource('product-categories', ProductCategoryController::class);
         Route::resource('brands', BrandController::class);
         Route::resource('product-attributes', ProductAttributeController::class);
         Route::resource('products', ProductController::class);
         Route::resource('products.skus', ProductSkuController::class);
+        
+        // 用户资料
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     });
     
-    Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('posts.comments.store');
-    Route::delete('/posts/{post}/comments/{comment}', [CommentController::class, 'destroy'])->name('posts.comments.destroy');
-});
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/admin/posts/{post}/comments', [CommentController::class, 'store'])->name('posts.comments.store');
+    Route::delete('/admin/posts/{post}/comments/{comment}', [CommentController::class, 'destroy'])->name('posts.comments.destroy');
 });
 
 require __DIR__.'/auth.php';
