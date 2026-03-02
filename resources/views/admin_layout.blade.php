@@ -134,16 +134,44 @@ use Illuminate\Support\Facades\Auth; ?>
             </div>
             @endif
             <h2>管理后台</h2>
-            <a href="{{ route('dashboard') }}" {{ str_starts_with($currentRoute, 'dashboard') ? 'class="active"' : '' }}>
+            <a href="{{ route('admin.dashboard') }}" {{ str_starts_with($currentRoute, 'dashboard') ? 'class="active"' : '' }}>
                 <span class="menu-icon">仪</span>
                 <span class="menu-text">仪表盘</span>
                 <span class="tooltip">仪表盘</span>
             </a>
             @if($canViewPosts)
-            <a href="{{ route('posts.index') }}" {{ str_starts_with($currentRoute, 'posts') ? 'class=active' : '' }}>
+            <a href="{{ route('admin.posts.index') }}" {{ str_starts_with($currentRoute, 'posts') ? 'class=active' : '' }}">
                 <span class="menu-icon">文</span>
                 <span class="menu-text">文章管理</span>
                 <span class="tooltip">文章管理</span>
+            </a>
+            @endif
+            @if($canViewCategories)
+            <a href="{{ route('admin.categories.index') }}" {{ str_starts_with($currentRoute, 'categories') ? 'class=active' : '' }}">
+                <span class="menu-icon">分</span>
+                <span class="menu-text">分类管理</span>
+                <span class="tooltip">分类管理</span>
+            </a>
+            @endif
+            @if($canViewUsers)
+            <a href="{{ route('admin.users.index') }}" {{ str_starts_with($currentRoute, 'users') ? 'class=active' : '' }}">
+                <span class="menu-icon">用</span>
+                <span class="menu-text">用户管理</span>
+                <span class="tooltip">用户管理</span>
+            </a>
+            @endif
+            @if($canViewRoles)
+            <a href="{{ route('admin.roles.index') }}" {{ str_starts_with($currentRoute, 'roles') ? 'class=active' : '' }}">
+                <span class="menu-icon">角</span>
+                <span class="menu-text">角色管理</span>
+                <span class="tooltip">角色管理</span>
+            </a>
+            @endif
+            @if($canViewPermissions)
+            <a href="{{ route('admin.permissions.index') }}" {{ str_starts_with($currentRoute, 'permissions') ? 'class=active' : '' }}">
+                <span class="menu-icon">权</span>
+                <span class="menu-text">权限管理</span>
+                <span class="tooltip">权限管理</span>
             </a>
             @endif
             @if($canViewCategories)
