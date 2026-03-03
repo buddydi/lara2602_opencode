@@ -17,6 +17,18 @@
         .user-area a { text-decoration: none; color: #666; font-size: 14px; }
         .cart-icon { position: relative; }
         .cart-badge { position: absolute; top: -8px; right: -8px; background: #e4393c; color: #fff; font-size: 12px; padding: 2px 6px; border-radius: 10px; }
+        .mini-cart { position: relative; }
+        .mini-cart-dropdown { display: none; position: absolute; right: 0; top: 100%; width: 280px; background: #fff; border: 1px solid #eee; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 1000; padding: 10px; }
+        .mini-cart:hover .mini-cart-dropdown { display: block; }
+        .mini-cart-items { max-height: 200px; overflow-y: auto; }
+        .mini-cart-item { display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid #eee; }
+        .mini-cart-item img { width: 40px; height: 40px; object-fit: cover; border-radius: 4px; }
+        .mini-cart-item-info { flex: 1; }
+        .mini-cart-item-info .name { font-size: 12px; color: #333; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .mini-cart-item-info .price { font-size: 12px; color: #e4393c; }
+        .mini-cart-total { padding: 10px 0; font-size: 14px; color: #333; text-align: right; }
+        .mini-cart-btn { display: block; text-align: center; background: #e4393c; color: #fff; padding: 8px; border-radius: 4px; text-decoration: none; }
+        .mini-cart-empty { padding: 20px; text-align: center; color: #999; }
         .container { max-width: 1200px; margin: 20px auto; padding: 0 20px; }
         .product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
         .product-card { background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: transform 0.2s; }
@@ -76,13 +88,48 @@
                 <a href="{{ route('products.index') }}">商品列表</a>
             </nav>
             <div class="user-area">
-                @auth('customer')
+                <div class="mini-cart">
                     <a href="{{ route('cart.index') }}" class="cart-icon">
                         购物车
-                        @if(Auth::guard('customer')->user()->cartItems->sum('quantity') > 0)
-                            <span class="cart-badge">{{ Auth::guard('customer')->user()->cartItems->sum('quantity') }}</span>
-                        @endif
+                        @auth('customer')
+                            @if(Auth::guard('customer')->user()->cartItems->sum('quantity') > 0)
+                                <span class="cart-badge">{{ Auth::guard('customer')->user()->cartItems->sum('quantity') }}</span>
+                            @endif
+                        @endauth
                     </a>
+                        @endauth
+                    </a>
+                    <div class="mini-cart-dropdown">
+                        @auth('customer')
+                            @php
+                                $miniCartItems = Auth::guard('customer')->user()->cartItems()->with('product')->take(3)->get();
+                                $miniCartTotal = $miniCartItems->sum(fn($item) => ($item->sku ? $item->sku->price : $item->product->price) * $item->quantity);
+                            @endphp
+                            @if($miniCartItems->count() > 0)
+                                <div class="mini-cart-items">
+                                    @foreach($miniCartItems as $item)
+                                    <div class="mini-cart-item">
+                                        <img src="{{ $item->product->cover_image ? asset('storage/' . $item->product->cover_image) : 'https://via.placeholder.com/40' }}" alt="">
+                                        <div class="mini-cart-item-info">
+                                            <div class="name">{{ $item->product->name }}</div>
+                                            <div class="price">¥{{ $item->sku ? $item->sku->price : $item->product->price }} x {{ $item->quantity }}</div>
+                                        </div>
+                                    </div>
+                                    @endforeach
+                                </div>
+                                <div class="mini-cart-total">
+                                    合计: ¥{{ $miniCartTotal }}
+                                </div>
+                                <a href="{{ route('cart.index') }}" class="mini-cart-btn">查看购物车</a>
+                            @else
+                                <div class="mini-cart-empty">购物车是空的</div>
+                            @endif
+                        @else
+                            <div class="mini-cart-empty">请先登录</div>
+                        @endauth
+                    </div>
+                </div>
+                @auth('customer')
                     <a href="{{ route('orders.index') }}">我的订单</a>
                     <a href="{{ route('addresses.index') }}">收货地址</a>
                     <span>{{ Auth::guard('customer')->user()->name }}</span>

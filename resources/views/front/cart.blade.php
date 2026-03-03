@@ -4,8 +4,7 @@
 
 @section('content')
 @if($cartItems->count() > 0)
-<form method="POST" action="{{ route('orders.store') }}">
-    @csrf
+<form method="GET" action="{{ route('orders.checkout') }}">
     
     <table class="cart-table">
         <thead>
@@ -52,7 +51,7 @@
     <div class="cart-summary">
         <div>已选 <span id="selected-count">0</span> 件商品</div>
         <div class="cart-total">合计: ¥<span id="selected-total">{{ $total }}</span></div>
-        <button type="submit" class="btn" style="margin-top: 15px; width: 200px;">去结算</button>
+        <button type="button" onclick="goToCheckout()" class="btn" style="margin-top: 15px; width: 200px;">去结算</button>
     </div>
 </form>
 @else
@@ -108,6 +107,17 @@ function updateSummary() {
     });
     document.getElementById('selected-count').textContent = count;
     document.getElementById('selected-total').textContent = total.toFixed(2);
+}
+
+function goToCheckout() {
+    const checked = document.querySelectorAll('.cart-checkbox:checked');
+    if (checked.length === 0) {
+        alert('请选择要结算的商品');
+        return;
+    }
+    
+    const ids = Array.from(checked).map(cb => cb.value);
+    window.location.href = '{{ route("orders.checkout") }}?cart_item_ids=' + ids.join(',');
 }
 </script>
 @endsection
