@@ -115,9 +115,7 @@
                                     </div>
                                     @endforeach
                                 </div>
-                                <div class="mini-cart-total">
-                                    合计: ¥{{ $miniCartTotal }}
-                                </div>
+                                <div class="mini-cart-total">合计: ¥{{ $miniCartTotal }}</div>
                                 <a href="{{ route('cart.index') }}" class="mini-cart-btn">查看购物车</a>
                             @else
                                 <div class="mini-cart-empty">购物车是空的</div>
@@ -128,26 +126,12 @@
                     </div>
                 </div>
                 @auth('customer')
-                    <a href="{{ route('orders.index') }}">我的订单</a>
-                    <a href="{{ route('addresses.index') }}">收货地址</a>
-                    <span>{{ Auth::guard('customer')->user()->name }}</span>
-                    <form method="POST" action="{{ route('customer.logout') }}" style="display:inline;">
-                        @csrf
-                        <button type="submit" style="background:none;border:none;color:#666;cursor:pointer;font-size:14px;">退出</button>
-                    </form>
-                @else
-                    <a href="{{ route('customer.login') }}">登录</a>
-                    <a href="{{ route('customer.register') }}">注册</a>
-                @endauth
-                                <div class="mini-cart-empty">购物车是空的</div>
-                            @endif
-                        @else
-                            <div class="mini-cart-empty">请先登录</div>
-                        @endauth
-                    </div>
-                </div>
-                @auth('customer')
-                    <a href="{{ route('orders.index') }}">我的订单</a>
+                    <a href="{{ route('orders.index') }}" style="position: relative;">
+                        我的订单
+                        @if(Auth::guard('customer')->user()->orders()->count() > 0)
+                            <span class="cart-badge" style="top: -5px;">{{ Auth::guard('customer')->user()->orders()->count() }}</span>
+                        @endif
+                    </a>
                     <a href="{{ route('addresses.index') }}">收货地址</a>
                     <span>{{ Auth::guard('customer')->user()->name }}</span>
                     <form method="POST" action="{{ route('customer.logout') }}" style="display:inline;">

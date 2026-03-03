@@ -12,7 +12,7 @@
             <span style="color: #999;">订单号：</span>{{ $order->order_no }}
             <span style="margin-left: 15px; color: #999;">下单时间：</span>{{ $order->created_at }}
         </div>
-        <div style="color: #e4393c; font-size: 18px;">¥{{ $order->total_amount }}</div>
+        <div style="color: #e4393c; font-size: 18px;">¥{{ $order->total_amount + $order->shipping_fee }} <span style="font-size:12px;color:#999;">(含运费{{ $order->shipping_fee }}元)</span></div>
     </div>
     
     <div style="margin-bottom: 15px;">

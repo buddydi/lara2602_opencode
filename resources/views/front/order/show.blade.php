@@ -12,7 +12,11 @@
         <div><span style="color: #999;">下单时间：</span>{{ $order->created_at }}</div>
     </div>
     
-    <h3 style="margin-bottom: 15px; font-size: 16px;">收货信息</h3>
+    <h3 style="margin-bottom: 15px; font-size: 16px;">配送信息</h3>
+    <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #eee; border-radius: 8px;">
+        <div>配送方式：{{ $order->shipping_method === 'express' ? '快递配送' : '标准配送' }}</div>
+        <div>运费：¥{{ $order->shipping_fee }}</div>
+    </div>
     <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #eee; border-radius: 8px;">
         <div>{{ $order->address->name }} {{ $order->address->phone }}</div>
         <div style="color: #666;">{{ $order->address->full_address }}</div>
@@ -49,8 +53,10 @@
     
     <div style="text-align: right; margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee;">
         <div>商品总数：{{ $order->product_count }}</div>
+        <div>商品总价：¥{{ $order->total_amount }}</div>
+        <div>运费：¥{{ $order->shipping_fee }}</div>
         <div style="font-size: 20px; color: #e4393c; margin-top: 10px;">
-            订单总价：¥{{ $order->total_amount }}
+            应付总额：¥{{ $order->pay_amount }}
         </div>
     </div>
     

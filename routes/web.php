@@ -43,6 +43,7 @@ Route::middleware('customer')->group(function () {
     
     // 收货地址
     Route::resource('addresses', FrontAddressController::class);
+    Route::post('/addresses/{address}/set-default', [FrontAddressController::class, 'setDefault'])->name('addresses.setDefault');
     
     // 订单
     Route::get('/orders', [FrontOrderController::class, 'index'])->name('orders.index');

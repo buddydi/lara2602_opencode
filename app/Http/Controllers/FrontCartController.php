@@ -47,7 +47,7 @@ class FrontCartController extends Controller
                 'product_id' => $product->id,
                 'product_sku_id' => $request->sku_id,
             ],
-            ['quantity' => \DB::raw('quantity + ' . $request->quantity)]
+            ['quantity' => $request->quantity]
         );
 
         return redirect()->route('cart.index')->with('success', '已添加到购物车');

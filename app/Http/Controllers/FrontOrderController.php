@@ -20,6 +20,14 @@ class FrontOrderController extends Controller
     {
         $cartItemIds = $request->cart_item_ids ?? [];
         
+        if (is_string($cartItemIds)) {
+            $cartItemIds = array_filter(array_map('intval', explode(',', $cartItemIds)));
+        } elseif (is_array($cartItemIds)) {
+            $cartItemIds = array_filter(array_map('intval', $cartItemIds));
+        } else {
+            $cartItemIds = [];
+        }
+        
         if (empty($cartItemIds)) {
             return redirect()->route('cart.index')->with('error', '请选择要结算的商品');
         }
@@ -58,12 +66,14 @@ class FrontOrderController extends Controller
             'address_id' => 'required|exists:addresses,id',
         ]);
 
+        $cartItemIds = is_array($request->cart_item_ids) ? $request->cart_item_ids : array_filter([$request->cart_item_ids]);
+
         $address = Address::findOrFail($request->address_id);
         if ($address->customer_id != auth('customer')->id()) {
             return back()->with('error', '无效的收货地址');
         }
 
-        $cartItems = CartItem::whereIn('id', $request->cart_item_ids)
+        $cartItems = CartItem::whereIn('id', $cartItemIds)
             ->where('customer_id', auth('customer')->id())
             ->with(['product', 'sku'])
             ->get();
@@ -71,6 +81,9 @@ class FrontOrderController extends Controller
         if ($cartItems->isEmpty()) {
             return back()->with('error', '购物车为空');
         }
+
+        $shippingMethod = $request->shipping_method ?? 'standard';
+        $shippingFee = $shippingMethod === 'express' ? 10 : 0;
 
         $totalAmount = 0;
         $productCount = 0;
@@ -99,16 +112,19 @@ class FrontOrderController extends Controller
             'address_id' => $address->id,
             'order_no' => Order::generateOrderNo(),
             'total_amount' => $totalAmount,
-            'pay_amount' => $totalAmount,
+            'shipping_fee' => $shippingFee,
+            'freight' => $shippingFee,
+            'pay_amount' => $totalAmount + $shippingFee,
             'product_count' => $productCount,
             'status' => 'pending',
+            'shipping_method' => $shippingMethod,
         ]);
 
         foreach ($orderItems as $item) {
             $order->items()->create($item);
         }
 
-        CartItem::whereIn('id', $request->cart_item_ids)->delete();
+        CartItem::whereIn('id', $cartItemIds)->delete();
 
         return redirect()->route('orders.show', $order)->with('success', '订单创建成功');
     }
