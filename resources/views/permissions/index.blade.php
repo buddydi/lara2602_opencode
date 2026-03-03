@@ -5,7 +5,7 @@
 @section('content')
     <h1>权限管理</h1>
     
-    <a href="{{ route('permissions.create') }}" class="btn btn-primary">新建权限</a>
+    <a href="{{ route('admin.permissions.create') }}" class="btn btn-primary">新建权限</a>
     
     <table>
         <thead>
@@ -25,8 +25,8 @@
                     <td>{{ $permission->guard_name }}</td>
                     <td>{{ $permission->created_at }}</td>
                     <td>
-                        <a href="{{ route('permissions.edit', $permission) }}" class="btn btn-primary" style="padding: 5px 10px; font-size: 12px;">编辑</a>
-                        <form action="{{ route('permissions.destroy', $permission) }}" method="POST" style="display: inline;">
+                        <a href="{{ route('admin.permissions.edit', $permission) }}" class="btn btn-primary" style="padding: 5px 10px; font-size: 12px;">编辑</a>
+                        <form action="{{ route('admin.permissions.destroy', $permission) }}" method="POST" style="display: inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;" onclick="return confirm('确定删除？')">删除</button>

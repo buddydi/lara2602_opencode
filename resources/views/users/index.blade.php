@@ -5,7 +5,7 @@
 @section('content')
     <h1>用户管理</h1>
     
-    <a href="{{ route('users.create') }}" class="btn btn-primary">创建用户</a>
+    <a href="{{ route('admin.users.create') }}" class="btn btn-primary">创建用户</a>
     
     <table>
         <thead>
@@ -31,9 +31,9 @@
                         @endforelse
                     </td>
                     <td>
-                        <a href="{{ route('users.edit', $user) }}" class="btn btn-primary" style="padding: 5px 10px; font-size: 12px;">编辑</a>
+                        <a href="{{ route('admin.users.edit', $user) }}" class="btn btn-primary" style="padding: 5px 10px; font-size: 12px;">编辑</a>
                         @if($user->id !== 1)
-                            <form action="{{ route('users.destroy', $user) }}" method="POST" style="display: inline;">
+                            <form action="{{ route('admin.users.destroy', $user) }}" method="POST" style="display: inline;">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;" onclick="return confirm('确定删除？')">删除</button>

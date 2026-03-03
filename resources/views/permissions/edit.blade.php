@@ -5,7 +5,7 @@
 @section('content')
     <h1>编辑权限</h1>
     
-    <form action="{{ route('permissions.update', $permission) }}" method="POST">
+    <form action="{{ route('admin.permissions.update', $permission) }}" method="POST">
         @csrf
         @method('PUT')
         
@@ -15,6 +15,6 @@
         </div>
         
         <button type="submit" class="btn btn-primary">更新</button>
-        <a href="{{ route('permissions.index') }}" class="btn btn-secondary">取消</a>
+        <a href="{{ route('admin.permissions.index') }}" class="btn btn-secondary">取消</a>
     </form>
 @endsection

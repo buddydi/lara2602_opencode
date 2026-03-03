@@ -5,7 +5,7 @@
 @section('content')
     <h1>新建分类</h1>
     
-    <form action="{{ route('categories.store') }}" method="POST">
+    <form action="{{ route('admin.categories.store') }}" method="POST">
         @csrf
         
         <div class="form-group">
@@ -34,6 +34,6 @@
         </div>
         
         <button type="submit" class="btn btn-primary">创建</button>
-        <a href="{{ route('categories.index') }}" class="btn btn-secondary">返回</a>
+        <a href="{{ route('admin.categories.index') }}" class="btn btn-secondary">返回</a>
     </form>
 @endsection

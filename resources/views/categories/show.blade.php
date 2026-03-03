@@ -16,12 +16,12 @@
     </div>
     
     <div style="margin-top: 30px;">
-        <a href="{{ route('categories.edit', $category) }}" class="btn btn-primary">编辑</a>
-        <form action="{{ route('categories.destroy', $category) }}" method="POST" style="display: inline;">
+        <a href="{{ route('admin.categories.edit', $category) }}" class="btn btn-primary">编辑</a>
+        <form action="{{ route('admin.categories.destroy', $category) }}" method="POST" style="display: inline;">
             @csrf
             @method('DELETE')
             <button type="submit" class="btn btn-danger" onclick="return confirm('确定删除？')">删除</button>
         </form>
-        <a href="{{ route('categories.index') }}" class="btn btn-secondary">返回列表</a>
+        <a href="{{ route('admin.categories.index') }}" class="btn btn-secondary">返回列表</a>
     </div>
 @endsection

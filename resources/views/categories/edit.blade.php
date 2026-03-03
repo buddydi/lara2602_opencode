@@ -5,7 +5,7 @@
 @section('content')
     <h1>编辑分类</h1>
     
-    <form action="{{ route('categories.update', $category) }}" method="POST">
+    <form action="{{ route('admin.categories.update', $category) }}" method="POST">
         @csrf
         @method('PUT')
         
@@ -39,6 +39,6 @@
         </div>
         
         <button type="submit" class="btn btn-primary">更新</button>
-        <a href="{{ route('categories.index') }}" class="btn btn-secondary">返回</a>
+        <a href="{{ route('admin.categories.index') }}" class="btn btn-secondary">返回</a>
     </form>
 @endsection

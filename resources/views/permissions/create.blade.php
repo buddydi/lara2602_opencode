@@ -5,7 +5,7 @@
 @section('content')
     <h1>新建权限</h1>
     
-    <form action="{{ route('permissions.store') }}" method="POST">
+    <form action="{{ route('admin.permissions.store') }}" method="POST">
         @csrf
         
         <div class="form-group">
@@ -20,6 +20,6 @@
         </div>
         
         <button type="submit" class="btn btn-primary">创建</button>
-        <a href="{{ route('permissions.index') }}" class="btn btn-secondary">返回</a>
+        <a href="{{ route('admin.permissions.index') }}" class="btn btn-secondary">返回</a>
     </form>
 @endsection

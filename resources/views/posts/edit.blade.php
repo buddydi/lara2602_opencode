@@ -5,7 +5,7 @@
 @section('content')
     <h1>编辑文章</h1>
     
-    <form action="{{ route('posts.update', $post) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.posts.update', $post) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         
@@ -39,6 +39,6 @@
         </div>
         
         <button type="submit" class="btn btn-primary">更新</button>
-        <a href="{{ route('posts.index') }}" class="btn btn-secondary">返回</a>
+        <a href="{{ route('admin.posts.index') }}" class="btn btn-secondary">返回</a>
     </form>
 @endsection

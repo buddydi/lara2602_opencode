@@ -5,7 +5,7 @@
 @section('content')
     <h1>创建用户</h1>
     
-    <form action="{{ route('users.store') }}" method="POST">
+    <form action="{{ route('admin.users.store') }}" method="POST">
         @csrf
         
         <div class="form-group">
@@ -38,6 +38,6 @@
         </div>
         
         <button type="submit" class="btn btn-primary">创建</button>
-        <a href="{{ route('users.index') }}" class="btn btn-secondary">返回</a>
+        <a href="{{ route('admin.users.index') }}" class="btn btn-secondary">返回</a>
     </form>
 @endsection

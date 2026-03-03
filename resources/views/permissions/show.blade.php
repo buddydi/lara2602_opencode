@@ -20,6 +20,6 @@
         <p>{{ $permission->created_at }}</p>
     </div>
     
-    <a href="{{ route('permissions.index') }}" class="btn btn-secondary">返回列表</a>
-    <a href="{{ route('permissions.edit', $permission) }}" class="btn btn-primary">编辑</a>
+    <a href="{{ route('admin.permissions.index') }}" class="btn btn-secondary">返回列表</a>
+    <a href="{{ route('admin.permissions.edit', $permission) }}" class="btn btn-primary">编辑</a>
 @endsection

@@ -29,7 +29,7 @@
     </div>
     
     <div style="margin-top: 30px;">
-        <a href="{{ route('roles.edit', $role) }}" class="btn btn-primary">编辑</a>
-        <a href="{{ route('roles.index') }}" class="btn btn-secondary">返回列表</a>
+        <a href="{{ route('admin.roles.edit', $role) }}" class="btn btn-primary">编辑</a>
+        <a href="{{ route('admin.roles.index') }}" class="btn btn-secondary">返回列表</a>
     </div>
 @endsection

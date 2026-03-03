@@ -5,7 +5,7 @@
 @section('content')
     <h1>角色管理</h1>
     
-    <a href="{{ route('roles.create') }}" class="btn btn-primary">新建角色</a>
+    <a href="{{ route('admin.roles.create') }}" class="btn btn-primary">新建角色</a>
     
     <table>
         <thead>
@@ -29,10 +29,10 @@
                         @endforelse
                     </td>
                     <td>
-                        <a href="{{ route('roles.show', $role) }}" class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px;">查看</a>
-                        <a href="{{ route('roles.edit', $role) }}" class="btn btn-primary" style="padding: 5px 10px; font-size: 12px;">编辑</a>
+                        <a href="{{ route('admin.roles.show', $role) }}" class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px;">查看</a>
+                        <a href="{{ route('admin.roles.edit', $role) }}" class="btn btn-primary" style="padding: 5px 10px; font-size: 12px;">编辑</a>
                         @if($role->name !== 'admin')
-                            <form action="{{ route('roles.destroy', $role) }}" method="POST" style="display: inline;">
+                            <form action="{{ route('admin.roles.destroy', $role) }}" method="POST" style="display: inline;">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;" onclick="return confirm('确定删除？')">删除</button>

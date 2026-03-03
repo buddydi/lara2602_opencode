@@ -20,7 +20,7 @@
 @section('content')
     <h1>新建角色</h1>
     
-    <form action="{{ route('roles.store') }}" method="POST">
+    <form action="{{ route('admin.roles.store') }}" method="POST">
         @csrf
         
         <div class="form-group">
@@ -58,6 +58,6 @@
         </div>
         
         <button type="submit" class="btn btn-primary">创建</button>
-        <a href="{{ route('roles.index') }}" class="btn btn-secondary">返回</a>
+        <a href="{{ route('admin.roles.index') }}" class="btn btn-secondary">返回</a>
     </form>
 @endsection

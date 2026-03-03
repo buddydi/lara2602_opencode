@@ -20,7 +20,7 @@
 @section('content')
     <h1>编辑角色</h1>
     
-    <form action="{{ route('roles.update', $role) }}" method="POST">
+    <form action="{{ route('admin.roles.update', $role) }}" method="POST">
         @csrf
         @method('PUT')
         
@@ -60,6 +60,6 @@
         </div>
         
         <button type="submit" class="btn btn-primary">更新</button>
-        <a href="{{ route('roles.index') }}" class="btn btn-secondary">返回</a>
+        <a href="{{ route('admin.roles.index') }}" class="btn btn-secondary">返回</a>
     </form>
 @endsection

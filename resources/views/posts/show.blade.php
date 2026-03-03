@@ -22,12 +22,12 @@
     </div>
     
     <div style="margin-top: 30px;">
-        <a href="{{ route('posts.edit', $post) }}" class="btn btn-primary">编辑</a>
-        <form action="{{ route('posts.destroy', $post) }}" method="POST" style="display: inline;">
+        <a href="{{ route('admin.posts.edit', $post) }}" class="btn btn-primary">编辑</a>
+        <form action="{{ route('admin.posts.destroy', $post) }}" method="POST" style="display: inline;">
             @csrf
             @method('DELETE')
             <button type="submit" class="btn btn-danger" onclick="return confirm('确定删除？')">删除</button>
         </form>
-        <a href="{{ route('posts.index') }}" class="btn btn-secondary">返回列表</a>
+        <a href="{{ route('admin.posts.index') }}" class="btn btn-secondary">返回列表</a>
     </div>
 @endsection

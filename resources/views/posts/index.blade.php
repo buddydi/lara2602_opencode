@@ -5,7 +5,7 @@
 @section('content')
     <h1>文章管理</h1>
     
-    <a href="{{ route('posts.create') }}" class="btn btn-primary">新建文章</a>
+    <a href="{{ route('admin.posts.create') }}" class="btn btn-primary">新建文章</a>
     
     <table>
         <thead>
@@ -35,9 +35,9 @@
                     </td>
                     <td>{{ $post->published_at ? $post->published_at->format('Y-m-d H:i') : '-' }}</td>
                     <td>
-                        <a href="{{ route('posts.show', $post) }}" class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px;">查看</a>
-                        <a href="{{ route('posts.edit', $post) }}" class="btn btn-primary" style="padding: 5px 10px; font-size: 12px;">编辑</a>
-                        <form action="{{ route('posts.destroy', $post) }}" method="POST" style="display: inline;">
+                        <a href="{{ route('admin.posts.show', $post) }}" class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px;">查看</a>
+                        <a href="{{ route('admin.posts.edit', $post) }}" class="btn btn-primary" style="padding: 5px 10px; font-size: 12px;">编辑</a>
+                        <form action="{{ route('admin.posts.destroy', $post) }}" method="POST" style="display: inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;" onclick="return confirm('确定删除？')">删除</button>

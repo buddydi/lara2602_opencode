@@ -20,7 +20,7 @@
 @section('content')
     <h1>用户权限管理</h1>
     
-    <form action="{{ route('users.update', $user) }}" method="POST">
+    <form action="{{ route('admin.users.update', $user) }}" method="POST">
         @csrf
         @method('PUT')
         
@@ -89,6 +89,6 @@
         </div>
         
         <button type="submit" class="btn btn-primary">保存</button>
-        <a href="{{ route('users.index') }}" class="btn btn-secondary">返回</a>
+        <a href="{{ route('admin.users.index') }}" class="btn btn-secondary">返回</a>
     </form>
 @endsection

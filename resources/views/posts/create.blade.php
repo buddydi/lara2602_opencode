@@ -5,7 +5,7 @@
 @section('content')
     <h1>新建文章</h1>
     
-    <form action="{{ route('posts.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.posts.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         
         <div class="form-group">
@@ -33,6 +33,6 @@
         </div>
         
         <button type="submit" class="btn btn-primary">创建</button>
-        <a href="{{ route('posts.index') }}" class="btn btn-secondary">返回</a>
+        <a href="{{ route('admin.posts.index') }}" class="btn btn-secondary">返回</a>
     </form>
 @endsection
