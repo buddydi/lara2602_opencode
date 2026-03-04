@@ -22,6 +22,8 @@ class Order extends Model
         'payment_method',
         'paid_at',
         'shipping_no',
+        'shipping_company',
+        'shipping_traces',
         'shipped_at',
         'remark',
         'shipping_method',
@@ -48,6 +50,11 @@ class Order extends Model
     public function items(): HasMany
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(OrderReview::class);
     }
 
     public static function generateOrderNo(): string

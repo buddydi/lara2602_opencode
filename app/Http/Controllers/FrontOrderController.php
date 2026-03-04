@@ -141,6 +141,42 @@ class FrontOrderController extends Controller
 
         $order->update(['status' => 'cancelled']);
 
-        return back()->with('success', '订单已取消');
+        return redirect()->route('orders.index')->with('success', '订单已取消');
+    }
+
+    public function pay(Order $order)
+    {
+        if ($order->customer_id != auth('customer')->id()) {
+            return back()->with('error', '无权操作');
+        }
+
+        if ($order->status !== 'pending') {
+            return redirect()->route('orders.show', $order)->with('error', '该订单无法支付');
+        }
+
+        return view('front.order.pay', compact('order'));
+    }
+
+    public function processPayment(Request $request, Order $order)
+    {
+        if ($order->customer_id != auth('customer')->id()) {
+            return back()->with('error', '无权操作');
+        }
+
+        if ($order->status !== 'pending') {
+            return back()->with('error', '该订单无法支付');
+        }
+
+        $request->validate([
+            'pay_method' => 'required|in:alipay,wechat,balance',
+        ]);
+
+        $order->update([
+            'status' => 'paid',
+            'pay_method' => $request->pay_method,
+            'paid_at' => now(),
+        ]);
+
+        return redirect()->route('orders.show', $order)->with('success', '支付成功');
     }
 }

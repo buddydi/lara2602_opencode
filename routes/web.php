@@ -51,6 +51,12 @@ Route::middleware('customer')->group(function () {
     Route::get('/orders/{order}', [FrontOrderController::class, 'show'])->name('orders.show');
     Route::post('/orders', [FrontOrderController::class, 'store'])->name('orders.store');
     Route::patch('/orders/{order}/cancel', [FrontOrderController::class, 'cancel'])->name('orders.cancel');
+    Route::get('/orders/{order}/pay', [FrontOrderController::class, 'pay'])->name('orders.pay');
+    Route::post('/orders/{order}/pay', [FrontOrderController::class, 'processPayment'])->name('orders.processPayment');
+    
+    // 评价
+    Route::get('/orders/{order}/items/{item}/review', [FrontReviewController::class, 'create'])->name('orders.review.create');
+    Route::post('/orders/{order}/items/{item}/review', [FrontReviewController::class, 'store'])->name('orders.review.store');
 });
 
 // 后台管理路由（需要 /admin 前缀）

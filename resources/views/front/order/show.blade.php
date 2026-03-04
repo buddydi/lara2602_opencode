@@ -16,6 +16,10 @@
     <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #eee; border-radius: 8px;">
         <div>配送方式：{{ $order->shipping_method === 'express' ? '快递配送' : '标准配送' }}</div>
         <div>运费：¥{{ $order->shipping_fee }}</div>
+        @if($order->shipping_no)
+        <div>快递单号：{{ $order->shipping_no }}</div>
+        <div>发货时间：{{ $order->shipped_at }}</div>
+        @endif
     </div>
     <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #eee; border-radius: 8px;">
         <div>{{ $order->address->name }} {{ $order->address->phone }}</div>
@@ -60,7 +64,45 @@
         </div>
     </div>
     
+    @if($order->status === 'completed')
     <div style="margin-top: 20px;">
+        <h3 style="margin-bottom: 15px; font-size: 16px;">商品评价</h3>
+        @php
+            $reviewedItems = $order->reviews->pluck('order_item_id')->toArray();
+        @endphp
+        @foreach($order->items as $item)
+            @if(!in_array($item->id, $reviewedItems))
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; border: 1px solid #eee; border-radius: 4px; margin-bottom: 10px;">
+                <div>
+                    <span>{{ $item->product_name }}</span>
+ </div>
+                               <a href="{{ route('orders.review.create', [$order, $item]) }}" class="btn btn-sm">评价</a>
+            </div>
+            @else
+            <div style="padding: 10px; border: 1px solid #eee; border-radius: 4px; margin-bottom: 10px; background: #f9f9f9;">
+                <span>{{ $item->product_name }}</span>
+                <span style="color: #999; margin-left: 10px;">已评价</span>
+            </div>
+            @endif
+        @endforeach
+    </div>
+    @endif
+    
+    <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end;">
+        @if($order->status === 'pending')
+            <a href="{{ route('orders.pay', $order) }}" class="btn">立即支付</a>
+            <form method="POST" action="{{ route('orders.cancel', $order) }}">
+                @csrf
+                @method('PATCH')
+                <button type="submit" class="btn btn-outline" onclick="return confirm('确定要取消订单吗？')">取消订单</button>
+            </form>
+        @elseif($order->status === 'paid')
+            <form method="POST" action="{{ route('orders.cancel', $order) }}">
+                @csrf
+                @method('PATCH')
+                <button type="submit" class="btn btn-outline" onclick="return confirm('确定要取消订单吗？')">取消订单</button>
+            </form>
+        @endif
         <a href="{{ route('orders.index') }}" class="btn btn-outline">返回订单列表</a>
     </div>
 </div>
