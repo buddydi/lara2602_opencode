@@ -87,6 +87,9 @@ Route::middleware('auth')->group(function () {
         // 订单管理
         Route::resource('orders', \App\Http\Controllers\Admin\OrderController::class)->only(['index', 'show', 'update', 'destroy']);
         
+        // 评价管理
+        Route::resource('reviews', \App\Http\Controllers\Admin\ReviewController::class)->only(['index', 'show', 'update', 'destroy']);
+        
         // 商品模块
         Route::resource('product-categories', ProductCategoryController::class);
         Route::resource('brands', BrandController::class);

@@ -59,6 +59,39 @@
     </div>
 </div>
 
+@if($product->review_count > 0)
+<div style="margin-top: 30px; background: #fff; padding: 30px; border-radius: 8px;">
+    <h2 style="font-size: 18px; margin-bottom: 20px;">
+        用户评价 
+        <span style="font-size: 14px; color: #666; font-weight: normal;">
+            ({{ $product->review_count }}条评价)
+            @if($product->rating > 0)
+            <span style="color: #f5c518;">★</span> {{ number_format($product->rating, 1) }}分
+            @endif
+        </span>
+    </h2>
+    @foreach($product->reviews()->latest()->take(5)->get() as $review)
+    <div style="padding: 15px; border-bottom: 1px solid #eee;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+            <span>{{ $review->customer->name }}</span>
+            <span style="color: #f5c518;">
+                @for($i = 1; $i <= 5; $i++)
+                    {{ $i <= $review->rating ? '★' : '☆' }}
+                @endfor
+            </span>
+        </div>
+        <div style="color: #666;">{{ $review->content ?: '默认好评' }}</div>
+        <div style="color: #999; font-size: 12px; margin-top: 5px;">{{ $review->created_at }}</div>
+    </div>
+    @endforeach
+    @if($product->review_count > 5)
+    <div style="text-align: center; margin-top: 15px;">
+        <span style="color: #999;">查看更多评价</span>
+    </div>
+    @endif
+</div>
+@endif
+
 <div style="margin-top: 30px; background: #fff; padding: 30px; border-radius: 8px;">
     <h2 style="font-size: 18px; margin-bottom: 20px;">商品详情</h2>
     <div style="line-height: 2; color: #666;">

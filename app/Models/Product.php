@@ -48,4 +48,24 @@ class Product extends Model
     {
         return $this->hasMany(ProductAttributeValue::class);
     }
+
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(OrderReview::class)->where('status', 1);
+    }
+
+    public function allReviews(): HasMany
+    {
+        return $this->hasMany(OrderReview::class);
+    }
+
+    public function getRatingAttribute(): float
+    {
+        return $this->reviews()->avg('rating') ?: 0;
+    }
+
+    public function getReviewCountAttribute(): int
+    {
+        return $this->reviews()->count();
+    }
 }
