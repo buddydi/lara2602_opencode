@@ -75,8 +75,8 @@
             <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; border: 1px solid #eee; border-radius: 4px; margin-bottom: 10px;">
                 <div>
                     <span>{{ $item->product_name }}</span>
- </div>
-                               <a href="{{ route('orders.review.create', [$order, $item]) }}" class="btn btn-sm">评价</a>
+                </div>
+                <a href="{{ route('orders.review.create', [$order, $item]) }}" class="btn btn-sm">评价</a>
             </div>
             @else
             <div style="padding: 10px; border: 1px solid #eee; border-radius: 4px; margin-bottom: 10px; background: #f9f9f9;">
@@ -102,6 +102,13 @@
                 @method('PATCH')
                 <button type="submit" class="btn btn-outline" onclick="return confirm('确定要取消订单吗？')">取消订单</button>
             </form>
+        @elseif($order->status === 'shipped')
+            <form method="POST" action="{{ route('orders.receive', $order) }}">
+                @csrf
+                <button type="submit" class="btn" onclick="return confirm('确定已收到货物吗？')">确认收货</button>
+            </form>
+        @elseif($order->status === 'completed')
+            <span style="color: #28a745; padding: 5px 15px; border: 1px solid #28a745; border-radius: 4px;">已完成</span>
         @endif
         <a href="{{ route('orders.index') }}" class="btn btn-outline">返回订单列表</a>
     </div>

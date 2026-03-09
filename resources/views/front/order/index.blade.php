@@ -33,7 +33,12 @@
             @elseif($order->status === 'cancelled') color: #dc3545;
             @else color: #e4393c;
             @endif
-        ">{{ $order->status_text }}</span>
+        ">
+            {{ $order->status_text }}
+            @if($order->status === 'shipped' && $order->shipping_no)
+                <span style="color: #666; font-size: 12px; margin-left: 5px;">({{ $order->shipping_company ?: '快递' }}: {{ $order->shipping_no }})</span>
+            @endif
+        </span>
         
         <div>
             <a href="{{ route('orders.show', $order) }}" class="btn btn-outline" style="padding: 5px 15px; font-size: 12px;">查看详情</a>

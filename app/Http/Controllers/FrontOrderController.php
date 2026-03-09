@@ -179,4 +179,19 @@ class FrontOrderController extends Controller
 
         return redirect()->route('orders.show', $order)->with('success', '支付成功');
     }
+
+    public function receive(Order $order)
+    {
+        if ($order->customer_id != auth('customer')->id()) {
+            return back()->with('error', '无权操作');
+        }
+
+        if ($order->status !== 'shipped') {
+            return back()->with('error', '该订单无法确认收货');
+        }
+
+        $order->update(['status' => 'completed']);
+
+        return redirect()->route('orders.show', $order)->with('success', '确认收货成功');
+    }
 }

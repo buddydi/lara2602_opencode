@@ -53,6 +53,7 @@ Route::middleware('customer')->group(function () {
     Route::patch('/orders/{order}/cancel', [FrontOrderController::class, 'cancel'])->name('orders.cancel');
     Route::get('/orders/{order}/pay', [FrontOrderController::class, 'pay'])->name('orders.pay');
     Route::post('/orders/{order}/pay', [FrontOrderController::class, 'processPayment'])->name('orders.processPayment');
+    Route::post('/orders/{order}/receive', [FrontOrderController::class, 'receive'])->name('orders.receive');
     
     // 评价
     Route::get('/orders/{order}/items/{item}/review', [FrontReviewController::class, 'create'])->name('orders.review.create');
