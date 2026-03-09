@@ -80,6 +80,12 @@ Route::middleware('auth')->group(function () {
         Route::resource('permissions', PermissionController::class);
         Route::resource('users', UserController::class);
         
+        // 客户管理
+        Route::resource('customers', \App\Http\Controllers\Admin\CustomerController::class)->only(['index', 'show', 'destroy']);
+        
+        // 订单管理
+        Route::resource('orders', \App\Http\Controllers\Admin\OrderController::class)->only(['index', 'show', 'update', 'destroy']);
+        
         // 商品模块
         Route::resource('product-categories', ProductCategoryController::class);
         Route::resource('brands', BrandController::class);

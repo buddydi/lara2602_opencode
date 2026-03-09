@@ -196,12 +196,22 @@ use Illuminate\Support\Facades\Auth; ?>
             </a>
             @endif
             @if($canViewProducts)
-            <a href="{{ route('admin.products.index') }}" {{ str_starts_with($currentRoute, 'products') ? 'class=active' : '' }}>
+            <a href="{{ route('admin.products.index') }}" {{ str_starts_with($currentRoute, 'products') ? 'class=active' : '' }}">
                 <span class="menu-icon">货</span>
                 <span class="menu-text">商品管理</span>
                 <span class="tooltip">商品管理</span>
             </a>
             @endif
+            <a href="{{ route('admin.customers.index') }}" {{ str_starts_with($currentRoute, 'customers') ? 'class=active' : '' }}">
+                <span class="menu-icon">客</span>
+                <span class="menu-text">客户管理</span>
+                <span class="tooltip">客户管理</span>
+            </a>
+            <a href="{{ route('admin.orders.index') }}" {{ str_starts_with($currentRoute, 'orders') ? 'class=active' : '' }}">
+                <span class="menu-icon">订</span>
+                <span class="menu-text">订单管理</span>
+                <span class="tooltip">订单管理</span>
+            </a>
         </div>
         <div class="main" id="main">
             @if (session('success'))
