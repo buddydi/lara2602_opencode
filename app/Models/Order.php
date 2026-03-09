@@ -54,6 +54,11 @@ class Order extends Model
 
     public function reviews(): HasMany
     {
+        return $this->hasMany(OrderReview::class)->where('status', 'approved');
+    }
+
+    public function allReviews(): HasMany
+    {
         return $this->hasMany(OrderReview::class);
     }
 

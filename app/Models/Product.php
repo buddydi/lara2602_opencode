@@ -51,7 +51,7 @@ class Product extends Model
 
     public function reviews(): HasMany
     {
-        return $this->hasMany(OrderReview::class)->where('status', 1);
+        return $this->hasMany(OrderReview::class)->where('status', 'approved');
     }
 
     public function allReviews(): HasMany

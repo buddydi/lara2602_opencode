@@ -30,11 +30,19 @@
                     <td>{{ $review->rating }}星</td>
                     <td>{{ Str::limit($review->content, 30) }}</td>
                     <td>
-                        @if($review->status === 1)
-                        <span class="badge badge-success">显示</span>
-                        @else
-                        <span class="badge badge-secondary">隐藏</span>
-                        @endif
+                        @switch($review->status)
+                            @case('pending')
+                                <span class="badge badge-warning">待审核</span>
+                                @break
+                            @case('approved')
+                                <span class="badge badge-success">通过</span>
+                                @break
+                            @case('rejected')
+                                <span class="badge badge-danger">拒绝</span>
+                                @break
+                            @default
+                                {{ $review->status }}
+                        @endswitch
                     </td>
                     <td>{{ $review->created_at }}</td>
                     <td>

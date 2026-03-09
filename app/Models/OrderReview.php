@@ -44,4 +44,14 @@ class OrderReview extends Model
     {
         return $this->belongsTo(OrderItem::class, 'order_item_id');
     }
+
+    public function getStatusTextAttribute(): string
+    {
+        return match($this->status) {
+            'pending' => '待审核',
+            'approved' => '通过',
+            'rejected' => '拒绝',
+            default => '未知',
+        };
+    }
 }

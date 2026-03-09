@@ -21,6 +21,10 @@ class ReviewController extends Controller
 
     public function update(Request $request, OrderReview $review)
     {
+        $request->validate([
+            'status' => 'required|in:pending,approved,rejected',
+        ]);
+
         $review->update(['status' => $request->status]);
         return back()->with('success', '更新成功');
     }

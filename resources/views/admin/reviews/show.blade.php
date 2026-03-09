@@ -44,8 +44,9 @@
                         @csrf
                         @method('PUT')
                         <select name="status" class="form-control mr-2">
-                            <option value="1" {{ $review->status == 1 ? 'selected' : '' }}>显示</option>
-                            <option value="0" {{ $review->status == 0 ? 'selected' : '' }}>隐藏</option>
+                            <option value="pending" {{ $review->status == 'pending' ? 'selected' : '' }}>待审核</option>
+                            <option value="approved" {{ $review->status == 'approved' ? 'selected' : '' }}>通过</option>
+                            <option value="rejected" {{ $review->status == 'rejected' ? 'selected' : '' }}>拒绝</option>
                         </select>
                         <button type="submit" class="btn btn-primary">更新状态</button>
                     </form>
