@@ -16,6 +16,7 @@ use App\Http\Controllers\FrontHomeController;
 use App\Http\Controllers\FrontCartController;
 use App\Http\Controllers\FrontAddressController;
 use App\Http\Controllers\FrontOrderController;
+use App\Http\Controllers\FrontReviewController;
 use App\Http\Controllers\CustomerAuthController;
 use Illuminate\Support\Facades\Route;
 
