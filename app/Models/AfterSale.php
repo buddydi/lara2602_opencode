@@ -2,11 +2,17 @@
 
 namespace App\Models;
 
+use App\Traits\Loggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AfterSale extends Model
 {
+    use Loggable;
+    
+    protected static $logModule = 'after-sale';
+    protected static $logModuleName = '售后';
+    
     protected $fillable = [
         'order_id',
         'customer_id',

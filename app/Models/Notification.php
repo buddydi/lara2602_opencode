@@ -2,11 +2,17 @@
 
 namespace App\Models;
 
+use App\Traits\Loggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Notification extends Model
 {
+    use Loggable;
+    
+    protected static $logModule = 'notification';
+    protected static $logModuleName = '消息通知';
+    
     protected $fillable = [
         'customer_id',
         'type',

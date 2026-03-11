@@ -2,11 +2,17 @@
 
 namespace App\Models;
 
+use App\Traits\Loggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Coupon extends Model
 {
+    use Loggable;
+    
+    protected static $logModule = 'coupon';
+    protected static $logModuleName = '优惠券';
+    
     protected $fillable = [
         'code',
         'name',

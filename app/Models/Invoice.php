@@ -2,11 +2,17 @@
 
 namespace App\Models;
 
+use App\Traits\Loggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Invoice extends Model
 {
+    use Loggable;
+    
+    protected static $logModule = 'invoice';
+    protected static $logModuleName = '发票';
+    
     protected $fillable = [
         'order_id',
         'customer_id',
