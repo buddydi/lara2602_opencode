@@ -11,12 +11,12 @@ class ProductAttributeController extends Controller
     public function index()
     {
         $attributes = ProductAttribute::with('values')->orderBy('order')->get();
-        return view('admin.product-attributes.index', compact('attributes'));
+        return view('admin.admin.product-attributes.index', compact('attributes'));
     }
 
     public function create()
     {
-        return view('product-attributes.create');
+        return view('admin.product-attributes.create');
     }
 
     public function store(Request $request)
@@ -49,17 +49,17 @@ class ProductAttributeController extends Controller
             }
         }
 
-        return redirect()->route('admin.product-attributes.index')->with('success', '属性创建成功');
+        return redirect()->route('admin.admin.product-attributes.index')->with('success', '属性创建成功');
     }
 
     public function show(ProductAttribute $productAttribute)
     {
-        return view('product-attributes.show', compact('productAttribute'));
+        return view('admin.product-attributes.show', compact('productAttribute'));
     }
 
     public function edit(ProductAttribute $productAttribute)
     {
-        return view('product-attributes.edit', compact('productAttribute'));
+        return view('admin.product-attributes.edit', compact('productAttribute'));
     }
 
     public function update(Request $request, ProductAttribute $productAttribute)
@@ -95,16 +95,16 @@ class ProductAttributeController extends Controller
             }
         }
 
-        return redirect()->route('admin.product-attributes.index')->with('success', '属性更新成功');
+        return redirect()->route('admin.admin.product-attributes.index')->with('success', '属性更新成功');
     }
 
     public function destroy(ProductAttribute $productAttribute)
     {
         if ($productAttribute->products()->count() > 0) {
-            return redirect()->route('admin.product-attributes.index')->with('error', '该属性已被商品使用，无法删除');
+            return redirect()->route('admin.admin.product-attributes.index')->with('error', '该属性已被商品使用，无法删除');
         }
 
         $productAttribute->delete();
-        return redirect()->route('admin.product-attributes.index')->with('success', '属性删除成功');
+        return redirect()->route('admin.admin.product-attributes.index')->with('success', '属性删除成功');
     }
 }

@@ -20,7 +20,7 @@ class ProductCategoryController extends Controller
     public function create()
     {
         $categories = ProductCategory::flatTree();
-        return view('product-categories.create', compact('categories'));
+        return view('admin.product-categories.create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -51,13 +51,13 @@ class ProductCategoryController extends Controller
 
     public function show(ProductCategory $productCategory)
     {
-        return view('product-categories.show', compact('productCategory'));
+        return view('admin.product-categories.show', compact('productCategory'));
     }
 
     public function edit(ProductCategory $productCategory)
     {
         $categories = ProductCategory::flatTree()->except($productCategory->id);
-        return view('product-categories.edit', compact('productCategory', 'categories'));
+        return view('admin.product-categories.edit', compact('productCategory', 'categories'));
     }
 
     public function update(Request $request, ProductCategory $productCategory)

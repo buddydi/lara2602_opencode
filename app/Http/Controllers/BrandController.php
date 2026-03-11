@@ -12,12 +12,12 @@ class BrandController extends Controller
     public function index()
     {
         $brands = Brand::orderBy('id', 'desc')->paginate(20);
-        return view('admin.brands.index', compact('brands'));
+        return view('admin.admin.brands.index', compact('brands'));
     }
 
     public function create()
     {
-        return view('brands.create');
+        return view('admin.brands.create');
     }
 
     public function store(Request $request)
@@ -41,17 +41,17 @@ class BrandController extends Controller
 
         Brand::create($validated);
 
-        return redirect()->route('admin.brands.index')->with('success', '品牌创建成功');
+        return redirect()->route('admin.admin.brands.index')->with('success', '品牌创建成功');
     }
 
     public function show(Brand $brand)
     {
-        return view('brands.show', compact('brand'));
+        return view('admin.brands.show', compact('brand'));
     }
 
     public function edit(Brand $brand)
     {
-        return view('brands.edit', compact('brand'));
+        return view('admin.brands.edit', compact('brand'));
     }
 
     public function update(Request $request, Brand $brand)
@@ -80,13 +80,13 @@ class BrandController extends Controller
 
         $brand->update($validated);
 
-        return redirect()->route('admin.brands.index')->with('success', '品牌更新成功');
+        return redirect()->route('admin.admin.brands.index')->with('success', '品牌更新成功');
     }
 
     public function destroy(Brand $brand)
     {
         if ($brand->products()->count() > 0) {
-            return redirect()->route('admin.brands.index')->with('error', '该品牌下还有商品，无法删除');
+            return redirect()->route('admin.admin.brands.index')->with('error', '该品牌下还有商品，无法删除');
         }
 
         if ($brand->logo) {
@@ -94,7 +94,7 @@ class BrandController extends Controller
         }
 
         $brand->delete();
-        return redirect()->route('admin.brands.index')->with('success', '品牌删除成功');
+        return redirect()->route('admin.admin.brands.index')->with('success', '品牌删除成功');
     }
 
     protected function uploadImage($image)

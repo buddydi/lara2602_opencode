@@ -11,12 +11,12 @@ class ProductSkuController extends Controller
     public function index(Product $product)
     {
         $skus = $product->skus()->orderBy('id')->get();
-        return view('product-skus.index', compact('product', 'skus'));
+        return view('admin.product-skus.index', compact('product', 'skus'));
     }
 
     public function create(Product $product)
     {
-        return view('product-skus.create', compact('product'));
+        return view('admin.product-skus.create', compact('product'));
     }
 
     public function store(Request $request, Product $product)
@@ -38,7 +38,7 @@ class ProductSkuController extends Controller
 
     public function edit(Product $product, ProductSku $sku)
     {
-        return view('product-skus.edit', compact('product', 'sku'));
+        return view('admin.product-skus.edit', compact('product', 'sku'));
     }
 
     public function update(Request $request, Product $product, ProductSku $sku)

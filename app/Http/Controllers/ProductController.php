@@ -34,7 +34,7 @@ class ProductController extends Controller
         $brands = Brand::where('is_active', true)->get();
         $attributes = ProductAttribute::with('values')->get();
         
-        return view('products.create', compact('categories', 'brands', 'attributes'));
+        return view('admin.products.create', compact('categories', 'brands', 'attributes'));
     }
 
     public function store(Request $request)
@@ -71,7 +71,7 @@ class ProductController extends Controller
     public function show(Product $product)
     {
         $product->load(['category', 'brand', 'skus', 'attributeValues.attribute', 'attributeValues.attributeValue']);
-        return view('products.show', compact('product'));
+        return view('admin.products.show', compact('product'));
     }
 
     public function edit(Product $product)
@@ -81,7 +81,7 @@ class ProductController extends Controller
         $attributes = ProductAttribute::with('values')->get();
         $product->load('attributeValues.attributeValue');
         
-        return view('products.edit', compact('product', 'categories', 'brands', 'attributes'));
+        return view('admin.products.edit', compact('product', 'categories', 'brands', 'attributes'));
     }
 
     public function update(Request $request, Product $product)
