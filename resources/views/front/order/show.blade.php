@@ -117,6 +117,14 @@
                 @csrf
                 <button type="submit" class="btn" onclick="return confirm('确定已收到货物吗？')">确认收货</button>
             </form>
+            @php
+                $hasPendingAfterSale = $order->afterSales()->whereIn('status', ['pending', 'processing'])->exists();
+            @endphp
+            @if(!$hasPendingAfterSale)
+            <a href="{{ route('after-sales.create', $order) }}" class="btn btn-outline">申请售后</a>
+            @else
+            <a href="{{ route('after-sales.index') }}" class="btn btn-outline">查看售后</a>
+            @endif
         @elseif($order->status === 'completed')
             <span style="color: #28a745; padding: 5px 15px; border: 1px solid #28a745; border-radius: 4px;">已完成</span>
             @if(!$order->invoice)
@@ -125,6 +133,14 @@
             <span style="color: #faa300; padding: 5px 15px; border: 1px solid #faa300; border-radius: 4px;">发票待开</span>
             @elseif($order->invoice->status === 'issued')
             <span style="color: #28a745; padding: 5px 15px; border: 1px solid #28a745; border-radius: 4px;">已开票</span>
+            @endif
+            @php
+                $hasPendingAfterSale = $order->afterSales()->whereIn('status', ['pending', 'processing'])->exists();
+            @endphp
+            @if(!$hasPendingAfterSale)
+            <a href="{{ route('after-sales.create', $order) }}" class="btn btn-outline">申请售后</a>
+            @else
+            <a href="{{ route('after-sales.index') }}" class="btn btn-outline">查看售后</a>
             @endif
         @elseif($order->status === 'cancelled')
             <span style="color: #999; padding: 5px 15px; border: 1px solid #ddd; border-radius: 4px;">已取消</span>

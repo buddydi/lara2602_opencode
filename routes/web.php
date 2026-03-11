@@ -18,6 +18,7 @@ use App\Http\Controllers\FrontAddressController;
 use App\Http\Controllers\FrontOrderController;
 use App\Http\Controllers\FrontReviewController;
 use App\Http\Controllers\FrontRefundController;
+use App\Http\Controllers\FrontAfterSaleController;
 use App\Http\Controllers\FrontInvoiceController;
 use App\Http\Controllers\FrontPointsController;
 use App\Http\Controllers\FrontNotificationController;
@@ -72,6 +73,12 @@ Route::middleware('customer')->group(function () {
     
     // 积分
     Route::get('/points', [FrontPointsController::class, 'index'])->name('points.index');
+    
+    // 售后服务
+    Route::get('/after-sales', [FrontAfterSaleController::class, 'index'])->name('after-sales.index');
+    Route::get('/after-sales/{afterSale}', [FrontAfterSaleController::class, 'show'])->name('after-sales.show');
+    Route::get('/orders/{order}/after-sale/create', [FrontAfterSaleController::class, 'create'])->name('after-sales.create');
+    Route::post('/orders/{order}/after-sale', [FrontAfterSaleController::class, 'store'])->name('after-sales.store');
     
     // 消息通知
     Route::get('/notifications', [FrontNotificationController::class, 'index'])->name('notifications.index');

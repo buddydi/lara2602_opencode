@@ -77,11 +77,11 @@ class Order extends Model
         return $this->hasOne(Invoice::class);
     }
 
-    public static function generateOrderNo(): string
+    public function afterSales(): HasMany
     {
-        return date('YmdHis') . rand(1000, 9999);
+        return $this->hasMany(AfterSale::class);
     }
-
+    
     public function getStatusTextAttribute(): string
     {
         return match($this->status) {

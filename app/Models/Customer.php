@@ -62,6 +62,11 @@ class Customer extends Authenticatable
         return $this->hasMany(Notification::class)->where('status', 'unread');
     }
 
+    public function afterSales(): HasMany
+    {
+        return $this->hasMany(AfterSale::class);
+    }
+
     public static function getMemberLevelConfig(): array
     {
         return PointsRule::getMemberLevelConfig();

@@ -135,6 +135,7 @@
                     <a href="{{ route('addresses.index') }}">收货地址</a>
                     <a href="{{ route('invoices.index') }}">我的发票</a>
                     <a href="{{ route('refunds.index') }}">退款记录</a>
+                    <a href="{{ route('after-sales.index') }}">售后服务</a>
                     <a href="{{ route('points.index') }}">我的积分</a>
                     <a href="{{ route('notifications.index') }}">我的消息</a>
                     <span>{{ Auth::guard('customer')->user()->name }}</span>
