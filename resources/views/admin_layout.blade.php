@@ -276,6 +276,11 @@ use Illuminate\Support\Facades\Auth; ?>
                 <span class="menu-text">数据统计</span>
                 <span class="tooltip">数据统计</span>
             </a>
+            <a href="{{ route('admin.activity-logs.index') }}" {{ str_starts_with($currentRoute, 'activity-logs') ? 'class=active' : '' }}">
+                <span class="menu-icon">志</span>
+                <span class="menu-text">操作日志</span>
+                <span class="tooltip">操作日志</span>
+            </a>
         </div>
         <div class="main" id="main">
             @if (session('success'))

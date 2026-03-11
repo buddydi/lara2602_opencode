@@ -154,6 +154,10 @@ Route::middleware('auth')->group(function () {
         // 售后管理
         Route::resource('after-sales', \App\Http\Controllers\Admin\AfterSaleController::class)->only(['index', 'show', 'update']);
         
+        // 操作日志
+        Route::resource('activity-logs', \App\Http\Controllers\Admin\ActivityLogController::class)->only(['index', 'show', 'destroy']);
+        Route::post('/activity-logs/clear', [\App\Http\Controllers\Admin\ActivityLogController::class, 'clear'])->name('activity-logs.clear');
+        
         // 商品模块
         Route::resource('product-categories', ProductCategoryController::class);
         Route::resource('brands', BrandController::class);
