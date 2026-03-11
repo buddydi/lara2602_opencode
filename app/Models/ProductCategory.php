@@ -2,12 +2,18 @@
 
 namespace App\Models;
 
+use App\Traits\Loggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ProductCategory extends Model
 {
+    use Loggable;
+    
+    protected static $logModule = 'product-category';
+    protected static $logModuleName = '商品分类';
+    
     protected $fillable = [
         'name',
         'slug',
