@@ -110,9 +110,15 @@ use Illuminate\Support\Facades\Auth; ?>
         .pagination .page-item.active .page-link { background-color: #007bff; border-color: #007bff; }
         .badge-warning { background-color: #ffc107; color: #000; }
         .badge-success { background-color: #28a745; color: #fff; }
+        .badge-info { background-color: #17a2b8; color: #fff; }
+        .badge-danger { background-color: #dc3545; color: #fff; }
         .btn-sm { padding: 4px 8px; font-size: 12px; }
         .card { border: 1px solid #ddd; border-radius: 4px; margin-bottom: 20px; }
+        .card-header { padding: 15px; border-bottom: 1px solid #eee; background: #f8f9fa; border-radius: 4px 4px 0 0; }
+        .card-header h3 { margin: 0; font-size: 16px; }
         .card-body { padding: 15px; }
+        .info-row { display: flex; margin-bottom: 12px; }
+        .info-row .label { width: 100px; color: #666; flex-shrink: 0; }
     </style>
     @yield('styles')
 </head>
