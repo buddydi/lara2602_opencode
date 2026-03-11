@@ -17,6 +17,10 @@ use App\Http\Controllers\FrontCartController;
 use App\Http\Controllers\FrontAddressController;
 use App\Http\Controllers\FrontOrderController;
 use App\Http\Controllers\FrontReviewController;
+use App\Http\Controllers\FrontRefundController;
+use App\Http\Controllers\FrontInvoiceController;
+use App\Http\Controllers\FrontPointsController;
+use App\Http\Controllers\FrontNotificationController;
 use App\Http\Controllers\CustomerAuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -56,6 +60,27 @@ Route::middleware('customer')->group(function () {
     Route::post('/orders/{order}/pay', [FrontOrderController::class, 'processPayment'])->name('orders.processPayment');
     Route::post('/orders/{order}/receive', [FrontOrderController::class, 'receive'])->name('orders.receive');
     
+    // 退款
+    Route::get('/refunds', [FrontRefundController::class, 'index'])->name('refunds.index');
+    Route::get('/orders/{order}/refund', [FrontRefundController::class, 'create'])->name('orders.refund.create');
+    Route::post('/orders/{order}/refund', [FrontRefundController::class, 'store'])->name('orders.refund.store');
+    
+    // 发票
+    Route::get('/invoices', [FrontInvoiceController::class, 'index'])->name('invoices.index');
+    Route::get('/orders/{order}/invoice', [FrontInvoiceController::class, 'create'])->name('orders.invoice.create');
+    Route::post('/orders/{order}/invoice', [FrontInvoiceController::class, 'store'])->name('orders.invoice.store');
+    
+    // 积分
+    Route::get('/points', [FrontPointsController::class, 'index'])->name('points.index');
+    
+    // 消息通知
+    Route::get('/notifications', [FrontNotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/{notification}', [FrontNotificationController::class, 'show'])->name('notifications.show');
+    Route::post('/notifications/mark-all-read', [FrontNotificationController::class, 'markAllRead'])->name('notifications.markAllRead');
+    
+    // 物流跟踪
+    Route::get('/orders/{order}/shipping', [\App\Http\Controllers\FrontShippingController::class, 'show'])->name('orders.shipping.show');
+    
     // 评价
     Route::get('/orders/{order}/items/{item}/review', [FrontReviewController::class, 'create'])->name('orders.review.create');
     Route::post('/orders/{order}/items/{item}/review', [FrontReviewController::class, 'store'])->name('orders.review.store');
@@ -73,6 +98,9 @@ Route::middleware('auth')->group(function () {
         return view('dashboard');
     })->name('admin.dashboard');
     
+    // 数据统计
+    Route::get('/admin/statistics', [\App\Http\Controllers\Admin\DashboardController::class, 'statistics'])->name('admin.statistics');
+    
     // 后台页面（统一 /admin 前缀）
     Route::prefix('admin')->as('admin.')->group(function () {
         Route::resource('posts', PostController::class);
@@ -89,6 +117,35 @@ Route::middleware('auth')->group(function () {
         
         // 评价管理
         Route::resource('reviews', \App\Http\Controllers\Admin\ReviewController::class)->only(['index', 'show', 'update', 'destroy']);
+        
+        // 退款管理
+        Route::resource('refunds', \App\Http\Controllers\Admin\RefundController::class)->only(['index', 'show']);
+        Route::post('/refunds/{refund}/approve', [\App\Http\Controllers\Admin\RefundController::class, 'approve'])->name('refunds.approve');
+        Route::post('/refunds/{refund}/reject', [\App\Http\Controllers\Admin\RefundController::class, 'reject'])->name('refunds.reject');
+        
+        // 发票管理
+        Route::resource('invoices', \App\Http\Controllers\Admin\InvoiceController::class)->only(['index', 'show']);
+        Route::post('/invoices/{invoice}/issue', [\App\Http\Controllers\Admin\InvoiceController::class, 'issue'])->name('invoices.issue');
+        
+        // 积分管理
+        Route::get('/points', [\App\Http\Controllers\Admin\PointsController::class, 'index'])->name('points.index');
+        Route::get('/points/{customer}', [\App\Http\Controllers\Admin\PointsController::class, 'show'])->name('points.show');
+        Route::post('/points/{customer}/add', [\App\Http\Controllers\Admin\PointsController::class, 'add'])->name('points.add');
+        Route::post('/points/{customer}/deduct', [\App\Http\Controllers\Admin\PointsController::class, 'deduct'])->name('points.deduct');
+        
+        // 积分规则设置
+        Route::get('/points-rules', [\App\Http\Controllers\Admin\PointsRuleController::class, 'index'])->name('points-rules.index');
+        Route::post('/points-rules', [\App\Http\Controllers\Admin\PointsRuleController::class, 'update'])->name('points-rules.update');
+        
+        // 优惠券管理
+        Route::resource('coupons', \App\Http\Controllers\Admin\CouponController::class);
+        Route::post('/coupons/{coupon}/toggle', [\App\Http\Controllers\Admin\CouponController::class, 'toggle'])->name('coupons.toggle');
+        
+        // 消息管理
+        Route::resource('notifications', \App\Http\Controllers\Admin\NotificationController::class)->only(['index', 'create', 'store', 'destroy']);
+        
+        // 售后管理
+        Route::resource('after-sales', \App\Http\Controllers\Admin\AfterSaleController::class)->only(['index', 'show', 'update']);
         
         // 商品模块
         Route::resource('product-categories', ProductCategoryController::class);

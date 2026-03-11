@@ -41,13 +41,37 @@ class FrontOrderController extends Controller
             return redirect()->route('cart.index')->with('error', '购物车为空');
         }
 
-        $addresses = auth('customer')->user()->addresses()->orderBy('is_default', 'desc')->get();
+        $customer = auth('customer')->user();
+        $addresses = $customer->addresses()->orderBy('is_default', 'desc')->get();
         $subtotal = $cartItems->sum(function ($item) {
             $price = $item->sku ? $item->sku->price : $item->product->price;
             return $price * $item->quantity;
         });
 
-        return view('front.order.checkout', compact('cartItems', 'addresses', 'subtotal'));
+        $points = $customer->points;
+        $deductionRate = \App\Models\PointsRule::getDeductionRate();
+        $maxDeductionPercent = \App\Models\PointsRule::getMaxDeductionPercent();
+        $maxDeductionFromPercent = intval($subtotal * $maxDeductionPercent / 100);
+        $maxDeductionPoints = intval($maxDeductionFromPercent * $deductionRate);
+        $maxDeductionMoney = intval($points / $deductionRate);
+        $maxDeduction = min($maxDeductionPoints, $maxDeductionMoney, intval($subtotal));
+
+        $coupons = \App\Models\Coupon::where('is_active', true)
+            ->where('start_date', '<=', now())
+            ->where('end_date', '>=', now())
+            ->where(function ($query) use ($subtotal) {
+                $query->where('min_amount', '<=', $subtotal)
+                    ->orWhereNull('min_amount');
+            })
+            ->where(function ($query) use ($customer) {
+                $query->where(function ($q) use ($customer) {
+                    $q->where('usage_limit', 0)
+                        ->orWhereRaw('usage_count < usage_limit');
+                });
+            })
+            ->get();
+
+        return view('front.order.checkout', compact('cartItems', 'addresses', 'subtotal', 'points', 'maxDeduction', 'deductionRate', 'coupons'));
     }
 
     public function show(Order $order)
@@ -55,7 +79,7 @@ class FrontOrderController extends Controller
         if ($order->customer_id != auth('customer')->id()) {
             return back()->with('error', '无权操作');
         }
-        $order->load('items', 'address');
+        $order->load(['items', 'address', 'refund', 'invoice']);
         return view('front.order.show', compact('order'));
     }
 
@@ -71,6 +95,34 @@ class FrontOrderController extends Controller
         $address = Address::findOrFail($request->address_id);
         if ($address->customer_id != auth('customer')->id()) {
             return back()->with('error', '无效的收货地址');
+        }
+
+        $customer = auth('customer')->user();
+        $pointsUsed = intval($request->points_used ?? 0);
+        $deductionRate = \App\Models\PointsRule::getDeductionRate();
+        
+        $totalAmount = 0;
+        foreach ($cartItemIds as $id) {
+            $item = CartItem::find($id);
+            if ($item) {
+                $price = $item->sku ? $item->sku->price : $item->product->price;
+                $totalAmount += $price * $item->quantity;
+            }
+        }
+        $shippingMethod = $request->shipping_method ?? 'standard';
+        $shippingFee = $shippingMethod === 'express' ? 10 : 0;
+        $orderAmount = $totalAmount + $shippingFee;
+        
+        $maxDeductionPercent = \App\Models\PointsRule::getMaxDeductionPercent();
+        $maxDeductionPoints = $maxDeductionPercent > 0 ? intval($orderAmount * $maxDeductionPercent / 100 * $deductionRate) : PHP_INT_MAX;
+
+        if ($pointsUsed > 0) {
+            if ($pointsUsed > $customer->points) {
+                return back()->with('error', '积分不足');
+            }
+            if ($maxDeductionPercent > 0 && $pointsUsed > $maxDeductionPoints) {
+                return back()->with('error', '单次使用积分不能超过订单金额的' . $maxDeductionPercent . '%');
+            }
         }
 
         $cartItems = CartItem::whereIn('id', $cartItemIds)
@@ -107,21 +159,51 @@ class FrontOrderController extends Controller
             ];
         }
 
+        $pointsDeduction = $pointsUsed / $deductionRate;
+        
+        $couponDiscount = 0;
+        $couponId = null;
+        $couponCode = $request->coupon_code ?? '';
+        if ($couponCode) {
+            $coupon = \App\Models\Coupon::where('code', strtoupper($couponCode))->first();
+            if ($coupon && $coupon->canUse($customer->id)) {
+                $orderTotal = $totalAmount + $shippingFee - $pointsDeduction;
+                $couponDiscount = $coupon->calculateDiscount($orderTotal);
+                if ($couponDiscount > 0) {
+                    $couponId = $coupon->id;
+                }
+            }
+        }
+        
+        $payAmount = max(0.01, $totalAmount + $shippingFee - $pointsDeduction - $couponDiscount);
+
         $order = Order::create([
-            'customer_id' => auth('customer')->id(),
+            'customer_id' => $customer->id,
             'address_id' => $address->id,
             'order_no' => Order::generateOrderNo(),
             'total_amount' => $totalAmount,
             'shipping_fee' => $shippingFee,
             'freight' => $shippingFee,
-            'pay_amount' => $totalAmount + $shippingFee,
+            'pay_amount' => $payAmount,
             'product_count' => $productCount,
             'status' => 'pending',
             'shipping_method' => $shippingMethod,
+            'points_used' => $pointsUsed,
+            'points_deduction' => $pointsDeduction,
+            'coupon_id' => $couponId,
+            'coupon_discount' => $couponDiscount,
         ]);
 
         foreach ($orderItems as $item) {
             $order->items()->create($item);
+        }
+
+        if ($pointsUsed > 0) {
+            $customer->usePoints($pointsUsed, 'order_use', $order->id, "订单抵扣：使用{$pointsUsed}积分");
+        }
+
+        if ($couponId && $couponDiscount > 0) {
+            $coupon->useCoupon($customer->id, $order->id);
         }
 
         CartItem::whereIn('id', $cartItemIds)->delete();
@@ -192,6 +274,13 @@ class FrontOrderController extends Controller
 
         $order->update(['status' => 'completed']);
 
-        return redirect()->route('orders.show', $order)->with('success', '确认收货成功');
+        $pointsRate = \App\Models\PointsRule::getPointsRate();
+        $points = intval($order->pay_amount * $pointsRate);
+        if ($points > 0) {
+            $customer = $order->customer;
+            $customer->addPoints($points, 'order_complete', $order->id, "订单完成奖励：消费{$order->pay_amount}元，获得{$points}积分");
+        }
+
+        return redirect()->route('orders.show', $order)->with('success', '确认收货成功，获得 ' . $points . ' 积分');
     }
 }

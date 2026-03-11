@@ -162,6 +162,46 @@
                     <span>运费</span>
                     <span id="shipping-fee">¥0.00</span>
                 </div>
+                @if(isset($coupons) && $coupons->count() > 0)
+                <div class="summary-row" style="color: #faa300;">
+                    <span>可用优惠券</span>
+                    <span>{{ $coupons->count() }} 张</span>
+                </div>
+                <div class="summary-row">
+                    <span>优惠券码</span>
+                    <span>
+                        <input type="text" id="coupon-code" name="coupon_code" 
+                            placeholder="输入优惠码" 
+                            style="width: 120px; padding: 5px; text-align: center;">
+                        <button type="button" onclick="applyCoupon()" style="padding: 5px 10px; background: #faa300; color: #fff; border: none; border-radius: 4px; cursor: pointer;">使用</button>
+                    </span>
+                </div>
+                <div class="summary-row" id="coupon-discount-row" style="display: none;">
+                    <span>优惠券优惠</span>
+                    <span id="coupon-discount" style="color: #faa300;">-¥0.00</span>
+                </div>
+                @endif
+                @if($points > 0)
+                <div class="summary-row" style="color: #28a745;">
+                    <span>可用积分</span>
+                    <span>{{ $points }} 积分</span>
+                </div>
+                <div class="summary-row">
+                    <span>使用积分</span>
+                    <span>
+                        <input type="number" id="points-input" name="points_used" 
+                            min="0" max="{{ min($points, $maxDeduction) }}" 
+                            value="0" 
+                            style="width: 80px; padding: 5px; text-align: center;"
+                            onchange="calculateTotal()">
+                        <span style="color: #999; font-size: 12px;">({{ $deductionRate }}积分抵扣¥1)</span>
+                    </span>
+                </div>
+                <div class="summary-row" id="points-deduction-row" style="display: none;">
+                    <span>积分抵扣</span>
+                    <span id="points-deduction" style="color: #28a745;">-¥0.00</span>
+                </div>
+                @endif
                 <div class="summary-row summary-total">
                     <span>应付总额</span>
                     <span class="price" id="total-price">¥{{ number_format($subtotal, 2) }}</span>
@@ -189,6 +229,37 @@
     <script>
         let selectedAddressId = {{ $addresses->where('is_default', true)->first()?->id ?? $addresses->first()?->id ?? 0 }};
         let shippingFee = 0;
+        let subtotal = {{ $subtotal }};
+        let deductionRate = {{ $deductionRate }};
+        
+        function calculateTotal() {
+            let pointsInput = document.getElementById('points-input');
+            let pointsDeductionRow = document.getElementById('points-deduction-row');
+            let pointsDeductionEl = document.getElementById('points-deduction');
+            let totalPriceEl = document.getElementById('total-price');
+            
+            let pointsUsed = parseInt(pointsInput?.value || 0);
+            if (isNaN(pointsUsed) || pointsUsed < 0) pointsUsed = 0;
+            
+            let maxPoints = Math.min({{ $points ?? 0 }}, {{ $maxDeduction }});
+            if (pointsUsed > maxPoints) {
+                pointsUsed = maxPoints;
+                pointsInput.value = pointsUsed;
+            }
+            
+            let deduction = pointsUsed / deductionRate;
+            let total = subtotal + shippingFee - deduction;
+            if (total < 0.01) total = 0.01;
+            
+            if (pointsUsed > 0) {
+                pointsDeductionRow.style.display = 'flex';
+                pointsDeductionEl.textContent = '-¥' + deduction.toFixed(2);
+            } else {
+                pointsDeductionRow.style.display = 'none';
+            }
+            
+            totalPriceEl.textContent = '¥' + total.toFixed(2);
+        }
         
         document.addEventListener('DOMContentLoaded', function() {
             if (selectedAddressId > 0) {
@@ -197,6 +268,7 @@
                     item.classList.toggle('selected', item.dataset.id == selectedAddressId);
                 });
             }
+            calculateTotal();
         });
         
         function selectAddress(id) {

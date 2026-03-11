@@ -100,6 +100,19 @@ use Illuminate\Support\Facades\Auth; ?>
         .permission-group { margin-bottom: 20px; border: 1px solid #ddd; border-radius: 4px; padding: 15px; }
         .permission-group h3, .permission-group h4 { margin-top: 0; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
         .section-title { font-size: 18px; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin-bottom: 15px; }
+        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .page-header h1 { margin: 0; }
+        .filter-bar { margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 4px; }
+        .data-table { width: 100%; border-collapse: collapse; }
+        .data-table th, .data-table td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        .data-table th { background-color: #f4f4f4; }
+        .pagination { margin-top: 20px; }
+        .pagination .page-item.active .page-link { background-color: #007bff; border-color: #007bff; }
+        .badge-warning { background-color: #ffc107; color: #000; }
+        .badge-success { background-color: #28a745; color: #fff; }
+        .btn-sm { padding: 4px 8px; font-size: 12px; }
+        .card { border: 1px solid #ddd; border-radius: 4px; margin-bottom: 20px; }
+        .card-body { padding: 15px; }
     </style>
     @yield('styles')
 </head>
@@ -216,6 +229,46 @@ use Illuminate\Support\Facades\Auth; ?>
                 <span class="menu-icon">评</span>
                 <span class="menu-text">评价管理</span>
                 <span class="tooltip">评价管理</span>
+            </a>
+            <a href="{{ route('admin.refunds.index') }}" {{ str_starts_with($currentRoute, 'refunds') ? 'class=active' : '' }}">
+                <span class="menu-icon">退</span>
+                <span class="menu-text">退款管理</span>
+                <span class="tooltip">退款管理</span>
+            </a>
+            <a href="{{ route('admin.invoices.index') }}" {{ str_starts_with($currentRoute, 'invoices') ? 'class=active' : '' }}">
+                <span class="menu-icon">发</span>
+                <span class="menu-text">发票管理</span>
+                <span class="tooltip">发票管理</span>
+            </a>
+            <a href="{{ route('admin.points.index') }}" {{ str_starts_with($currentRoute, 'points') && !str_contains($currentRoute, 'points-rules') ? 'class=active' : '' }}">
+                <span class="menu-icon">积</span>
+                <span class="menu-text">积分管理</span>
+                <span class="tooltip">积分管理</span>
+            </a>
+            <a href="{{ route('admin.points-rules.index') }}" {{ str_contains($currentRoute, 'points-rules') ? 'class=active' : '' }}">
+                <span class="menu-icon">规</span>
+                <span class="menu-text">积分规则</span>
+                <span class="tooltip">积分规则设置</span>
+            </a>
+            <a href="{{ route('admin.coupons.index') }}" {{ str_starts_with($currentRoute, 'coupons') ? 'class=active' : '' }}">
+                <span class="menu-icon">惠</span>
+                <span class="menu-text">优惠券</span>
+                <span class="tooltip">优惠券管理</span>
+            </a>
+            <a href="{{ route('admin.notifications.index') }}" {{ str_starts_with($currentRoute, 'notifications') ? 'class=active' : '' }}">
+                <span class="menu-icon">消</span>
+                <span class="menu-text">消息推送</span>
+                <span class="tooltip">消息推送</span>
+            </a>
+            <a href="{{ route('admin.after-sales.index') }}" {{ str_starts_with($currentRoute, 'after-sales') ? 'class=active' : '' }}">
+                <span class="menu-icon">售</span>
+                <span class="menu-text">售后管理</span>
+                <span class="tooltip">售后管理</span>
+            </a>
+            <a href="{{ route('admin.statistics') }}" {{ $currentRoute === 'statistics' ? 'class=active' : '' }}">
+                <span class="menu-icon">统</span>
+                <span class="menu-text">数据统计</span>
+                <span class="tooltip">数据统计</span>
             </a>
         </div>
         <div class="main" id="main">

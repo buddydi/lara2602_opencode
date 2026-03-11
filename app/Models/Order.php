@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Order extends Model
 {
@@ -27,6 +28,10 @@ class Order extends Model
         'shipped_at',
         'remark',
         'shipping_method',
+        'points_used',
+        'points_deduction',
+        'coupon_id',
+        'coupon_discount',
     ];
 
     protected function casts(): array
@@ -60,6 +65,16 @@ class Order extends Model
     public function allReviews(): HasMany
     {
         return $this->hasMany(OrderReview::class);
+    }
+
+    public function refund(): HasOne
+    {
+        return $this->hasOne(Refund::class);
+    }
+
+    public function invoice(): HasOne
+    {
+        return $this->hasOne(Invoice::class);
     }
 
     public static function generateOrderNo(): string
