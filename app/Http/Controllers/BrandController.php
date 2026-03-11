@@ -12,7 +12,7 @@ class BrandController extends Controller
     public function index()
     {
         $brands = Brand::orderBy('id', 'desc')->paginate(20);
-        return view('brands.index', compact('brands'));
+        return view('admin.brands.index', compact('brands'));
     }
 
     public function create()
@@ -41,7 +41,7 @@ class BrandController extends Controller
 
         Brand::create($validated);
 
-        return redirect()->route('brands.index')->with('success', '品牌创建成功');
+        return redirect()->route('admin.brands.index')->with('success', '品牌创建成功');
     }
 
     public function show(Brand $brand)
@@ -80,13 +80,13 @@ class BrandController extends Controller
 
         $brand->update($validated);
 
-        return redirect()->route('brands.index')->with('success', '品牌更新成功');
+        return redirect()->route('admin.brands.index')->with('success', '品牌更新成功');
     }
 
     public function destroy(Brand $brand)
     {
         if ($brand->products()->count() > 0) {
-            return redirect()->route('brands.index')->with('error', '该品牌下还有商品，无法删除');
+            return redirect()->route('admin.brands.index')->with('error', '该品牌下还有商品，无法删除');
         }
 
         if ($brand->logo) {
@@ -94,7 +94,7 @@ class BrandController extends Controller
         }
 
         $brand->delete();
-        return redirect()->route('brands.index')->with('success', '品牌删除成功');
+        return redirect()->route('admin.brands.index')->with('success', '品牌删除成功');
     }
 
     protected function uploadImage($image)

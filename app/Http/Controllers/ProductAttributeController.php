@@ -11,7 +11,7 @@ class ProductAttributeController extends Controller
     public function index()
     {
         $attributes = ProductAttribute::with('values')->orderBy('order')->get();
-        return view('product-attributes.index', compact('attributes'));
+        return view('admin.product-attributes.index', compact('attributes'));
     }
 
     public function create()
@@ -49,7 +49,7 @@ class ProductAttributeController extends Controller
             }
         }
 
-        return redirect()->route('product-attributes.index')->with('success', '属性创建成功');
+        return redirect()->route('admin.product-attributes.index')->with('success', '属性创建成功');
     }
 
     public function show(ProductAttribute $productAttribute)
@@ -95,16 +95,16 @@ class ProductAttributeController extends Controller
             }
         }
 
-        return redirect()->route('product-attributes.index')->with('success', '属性更新成功');
+        return redirect()->route('admin.product-attributes.index')->with('success', '属性更新成功');
     }
 
     public function destroy(ProductAttribute $productAttribute)
     {
         if ($productAttribute->products()->count() > 0) {
-            return redirect()->route('product-attributes.index')->with('error', '该属性已被商品使用，无法删除');
+            return redirect()->route('admin.product-attributes.index')->with('error', '该属性已被商品使用，无法删除');
         }
 
         $productAttribute->delete();
-        return redirect()->route('product-attributes.index')->with('success', '属性删除成功');
+        return redirect()->route('admin.product-attributes.index')->with('success', '属性删除成功');
     }
 }

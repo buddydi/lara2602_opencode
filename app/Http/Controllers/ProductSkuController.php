@@ -33,7 +33,7 @@ class ProductSkuController extends Controller
         
         ProductSku::create($validated);
 
-        return redirect()->route('products.skus.index', $product)->with('success', 'SKU创建成功');
+        return redirect()->route('admin.products.skus.index', $product)->with('success', 'SKU创建成功');
     }
 
     public function edit(Product $product, ProductSku $sku)
@@ -53,12 +53,12 @@ class ProductSkuController extends Controller
 
         $sku->update($validated);
 
-        return redirect()->route('products.skus.index', $product)->with('success', 'SKU更新成功');
+        return redirect()->route('admin.products.skus.index', $product)->with('success', 'SKU更新成功');
     }
 
     public function destroy(Product $product, ProductSku $sku)
     {
         $sku->delete();
-        return redirect()->route('products.skus.index', $product)->with('success', 'SKU删除成功');
+        return redirect()->route('admin.products.skus.index', $product)->with('success', 'SKU删除成功');
     }
 }

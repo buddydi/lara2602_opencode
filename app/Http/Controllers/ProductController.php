@@ -25,7 +25,7 @@ class ProductController extends Controller
         $categories = ProductCategory::flatTree();
         $brands = Brand::where('is_active', true)->get();
         
-        return view('products.index', compact('products', 'categories', 'brands'));
+        return view('admin.products.index', compact('products', 'categories', 'brands'));
     }
 
     public function create()
@@ -65,7 +65,7 @@ class ProductController extends Controller
 
         $this->saveAttributeValues($product, $request);
 
-        return redirect()->route('products.index')->with('success', '商品创建成功');
+        return redirect()->route('admin.products.index')->with('success', '商品创建成功');
     }
 
     public function show(Product $product)
@@ -117,7 +117,7 @@ class ProductController extends Controller
 
         $this->saveAttributeValues($product, $request);
 
-        return redirect()->route('products.index')->with('success', '商品更新成功');
+        return redirect()->route('admin.products.index')->with('success', '商品更新成功');
     }
 
     public function destroy(Product $product)
@@ -127,7 +127,7 @@ class ProductController extends Controller
         }
         
         $product->delete();
-        return redirect()->route('products.index')->with('success', '商品删除成功');
+        return redirect()->route('admin.products.index')->with('success', '商品删除成功');
     }
 
     protected function uploadImage($image)

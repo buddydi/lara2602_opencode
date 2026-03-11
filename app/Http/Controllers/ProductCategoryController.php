@@ -14,7 +14,7 @@ class ProductCategoryController extends Controller
             ->whereNull('parent_id')
             ->orderBy('order')
             ->get();
-        return view('product-categories.index', compact('categories'));
+        return view('admin.product-categories.index', compact('categories'));
     }
 
     public function create()
@@ -46,7 +46,7 @@ class ProductCategoryController extends Controller
 
         ProductCategory::create($validated);
 
-        return redirect()->route('product-categories.index')->with('success', '商品分类创建成功');
+        return redirect()->route('admin.product-categories.index')->with('success', '商品分类创建成功');
     }
 
     public function show(ProductCategory $productCategory)
@@ -92,21 +92,21 @@ class ProductCategoryController extends Controller
 
         $productCategory->update($validated);
 
-        return redirect()->route('product-categories.index')->with('success', '商品分类更新成功');
+        return redirect()->route('admin.product-categories.index')->with('success', '商品分类更新成功');
     }
 
     public function destroy(ProductCategory $productCategory)
     {
         if ($productCategory->children()->count() > 0) {
-            return redirect()->route('product-categories.index')->with('error', '请先删除子分类');
+            return redirect()->route('admin.product-categories.index')->with('error', '请先删除子分类');
         }
 
         if ($productCategory->products()->count() > 0) {
-            return redirect()->route('product-categories.index')->with('error', '该分类下还有商品，无法删除');
+            return redirect()->route('admin.product-categories.index')->with('error', '该分类下还有商品，无法删除');
         }
 
         $productCategory->delete();
-        return redirect()->route('product-categories.index')->with('success', '商品分类删除成功');
+        return redirect()->route('admin.product-categories.index')->with('success', '商品分类删除成功');
     }
 
     protected function uploadImage($image)
