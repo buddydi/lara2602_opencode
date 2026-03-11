@@ -16,6 +16,11 @@
     </div>
     
     <div class="form-group">
+        <label>Slug（URL别名）</label>
+        <input type="text" name="slug" value="{{ $productCategory->slug }}" placeholder="留空则自动生成">
+    </div>
+    
+    <div class="form-group">
         <label>上级分类</label>
         <select name="parent_id">
             <option value="">顶级分类</option>

@@ -64,6 +64,7 @@ class ProductCategoryController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|max:255',
+            'slug' => 'nullable|max:255',
             'description' => 'nullable',
             'parent_id' => 'nullable|exists:product_categories,id',
             'image' => 'nullable|image|max:2048',
@@ -71,12 +72,15 @@ class ProductCategoryController extends Controller
             'order' => 'integer',
         ]);
 
-        if (isset($validated['name'])) {
-            $slug = Str::slug($validated['name']);
-            if (ProductCategory::where('slug', $slug)->where('id', '!=', $productCategory->id)->exists()) {
+        if (!empty($validated['slug'])) {
+            if (ProductCategory::where('slug', $validated['slug'])->where('id', '!=', $productCategory->id)->exists()) {
+                return back()->withInput()->with('error', 'Slug 已存在，请使用其他值');
+            }
+        } elseif (isset($validated['name'])) {
+            $validated['slug'] = Str::slug($validated['name']);
+            if (ProductCategory::where('slug', $validated['slug'])->where('id', '!=', $productCategory->id)->exists()) {
                 return back()->withInput()->with('error', '分类名称已存在，请使用其他名称');
             }
-            $validated['slug'] = $slug;
         }
 
         if ($request->hasFile('image')) {
