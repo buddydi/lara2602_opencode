@@ -276,6 +276,11 @@ use Illuminate\Support\Facades\Auth; ?>
                 <span class="menu-text">数据统计</span>
                 <span class="tooltip">数据统计</span>
             </a>
+            <a href="{{ route('admin.stock.index') }}" {{ str_starts_with($currentRoute, 'stock') ? 'class=active' : '' }}">
+                <span class="menu-icon">库</span>
+                <span class="menu-text">库存管理</span>
+                <span class="tooltip">库存管理</span>
+            </a>
             <a href="{{ route('admin.activity-logs.index') }}" {{ str_starts_with($currentRoute, 'activity-logs') ? 'class=active' : '' }}">
                 <span class="menu-icon">志</span>
                 <span class="menu-text">操作日志</span>

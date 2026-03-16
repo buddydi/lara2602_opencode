@@ -158,6 +158,19 @@ Route::middleware('auth')->group(function () {
         Route::resource('activity-logs', \App\Http\Controllers\Admin\ActivityLogController::class)->only(['index', 'show', 'destroy']);
         Route::post('/activity-logs/clear', [\App\Http\Controllers\Admin\ActivityLogController::class, 'clear'])->name('activity-logs.clear');
         
+        // 库存管理
+        Route::get('/stock', [\App\Http\Controllers\Admin\StockController::class, 'index'])->name('stock.index');
+        Route::get('/stock/logs', [\App\Http\Controllers\Admin\StockController::class, 'logs'])->name('stock.logs');
+        Route::get('/stock/create-log', [\App\Http\Controllers\Admin\StockController::class, 'createLog'])->name('stock.create-log');
+        Route::post('/stock/store-log', [\App\Http\Controllers\Admin\StockController::class, 'storeLog'])->name('stock.store-log');
+        Route::get('/stock/alerts', [\App\Http\Controllers\Admin\StockController::class, 'alerts'])->name('stock.alerts');
+        Route::get('/stock/create-alert', [\App\Http\Controllers\Admin\StockController::class, 'createAlert'])->name('stock.create-alert');
+        Route::post('/stock/store-alert', [\App\Http\Controllers\Admin\StockController::class, 'storeAlert'])->name('stock.store-alert');
+        Route::get('/stock/edit-alert/{stockAlert}', [\App\Http\Controllers\Admin\StockController::class, 'editAlert'])->name('stock.edit-alert');
+        Route::put('/stock/update-alert/{stockAlert}', [\App\Http\Controllers\Admin\StockController::class, 'updateAlert'])->name('stock.update-alert');
+        Route::delete('/stock/destroy-alert/{stockAlert}', [\App\Http\Controllers\Admin\StockController::class, 'destroyAlert'])->name('stock.destroy-alert');
+        Route::get('/stock/get-skus', [\App\Http\Controllers\Admin\StockController::class, 'getSkus'])->name('stock.get-skus');
+        
         // 商品模块
         Route::resource('product-categories', ProductCategoryController::class);
         Route::resource('brands', BrandController::class);
