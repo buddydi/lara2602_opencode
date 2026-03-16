@@ -226,6 +226,11 @@ use Illuminate\Support\Facades\Auth; ?>
                 <span class="menu-text">客户管理</span>
                 <span class="tooltip">客户管理</span>
             </a>
+            <a href="{{ route('admin.members.index') }}" {{ str_starts_with($currentRoute, 'members') ? 'class=active' : '' }}">
+                <span class="menu-icon">会</span>
+                <span class="menu-text">会员管理</span>
+                <span class="tooltip">会员管理</span>
+            </a>
             <a href="{{ route('admin.orders.index') }}" {{ str_starts_with($currentRoute, 'orders') ? 'class=active' : '' }}">
                 <span class="menu-icon">订</span>
                 <span class="menu-text">订单管理</span>
@@ -290,6 +295,11 @@ use Illuminate\Support\Facades\Auth; ?>
                 <span class="menu-icon">志</span>
                 <span class="menu-text">操作日志</span>
                 <span class="tooltip">操作日志</span>
+            </a>
+            <a href="{{ route('admin.settings.payment') }}" {{ str_starts_with($currentRoute, 'settings') ? 'class=active' : '' }}">
+                <span class="menu-icon">设</span>
+                <span class="menu-text">系统设置</span>
+                <span class="tooltip">系统设置</span>
             </a>
         </div>
         <div class="main" id="main">

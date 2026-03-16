@@ -123,6 +123,11 @@ Route::middleware('auth')->group(function () {
         // 客户管理
         Route::resource('customers', \App\Http\Controllers\Admin\CustomerController::class)->only(['index', 'show', 'destroy']);
         
+        // 会员管理
+        Route::get('/members/levels', [\App\Http\Controllers\Admin\MemberController::class, 'levelIndex'])->name('members.levels');
+        Route::put('/members/levels', [\App\Http\Controllers\Admin\MemberController::class, 'levelUpdate'])->name('members.levels.update');
+        Route::resource('members', \App\Http\Controllers\Admin\MemberController::class);
+        
         // 订单管理
         Route::resource('orders', \App\Http\Controllers\Admin\OrderController::class)->only(['index', 'show', 'update', 'destroy']);
         
@@ -178,6 +183,19 @@ Route::middleware('auth')->group(function () {
         // 促销活动
         Route::resource('promotions', \App\Http\Controllers\Admin\PromotionController::class);
         Route::post('/promotions/{promotion}/toggle', [\App\Http\Controllers\Admin\PromotionController::class, 'toggle'])->name('promotions.toggle');
+        
+        // 系统设置
+        Route::get('/settings', [\App\Http\Controllers\Admin\SettingsController::class, 'index'])->name('settings.index');
+        Route::get('/settings/payment', [\App\Http\Controllers\Admin\SettingsController::class, 'paymentIndex'])->name('settings.payment');
+        Route::post('/settings/payment', [\App\Http\Controllers\Admin\SettingsController::class, 'paymentStore'])->name('settings.payment.store');
+        Route::put('/settings/payment/{payment}', [\App\Http\Controllers\Admin\SettingsController::class, 'paymentUpdate'])->name('settings.payment.update');
+        Route::delete('/settings/payment/{payment}', [\App\Http\Controllers\Admin\SettingsController::class, 'paymentDestroy'])->name('settings.payment.destroy');
+        Route::get('/settings/shipping', [\App\Http\Controllers\Admin\SettingsController::class, 'shippingIndex'])->name('settings.shipping');
+        Route::post('/settings/shipping', [\App\Http\Controllers\Admin\SettingsController::class, 'shippingStore'])->name('settings.shipping.store');
+        Route::put('/settings/shipping/{shipping}', [\App\Http\Controllers\Admin\SettingsController::class, 'shippingUpdate'])->name('settings.shipping.update');
+        Route::delete('/settings/shipping/{shipping}', [\App\Http\Controllers\Admin\SettingsController::class, 'shippingDestroy'])->name('settings.shipping.destroy');
+        Route::get('/settings/shop', [\App\Http\Controllers\Admin\SettingsController::class, 'shop'])->name('settings.shop');
+        Route::put('/settings/shop', [\App\Http\Controllers\Admin\SettingsController::class, 'shopUpdate'])->name('settings.shop.update');
         
         // 商品模块
         Route::resource('product-categories', ProductCategoryController::class);
