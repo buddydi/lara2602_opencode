@@ -281,6 +281,11 @@ use Illuminate\Support\Facades\Auth; ?>
                 <span class="menu-text">库存管理</span>
                 <span class="tooltip">库存管理</span>
             </a>
+            <a href="{{ route('admin.promotions.index') }}" {{ str_starts_with($currentRoute, 'promotions') ? 'class=active' : '' }}">
+                <span class="menu-icon">促</span>
+                <span class="menu-text">促销活动</span>
+                <span class="tooltip">促销活动</span>
+            </a>
             <a href="{{ route('admin.activity-logs.index') }}" {{ str_starts_with($currentRoute, 'activity-logs') ? 'class=active' : '' }}">
                 <span class="menu-icon">志</span>
                 <span class="menu-text">操作日志</span>
