@@ -21,6 +21,7 @@ use App\Http\Controllers\FrontRefundController;
 use App\Http\Controllers\FrontAfterSaleController;
 use App\Http\Controllers\FrontInvoiceController;
 use App\Http\Controllers\FrontPointsController;
+use App\Http\Controllers\FrontVipController;
 use App\Http\Controllers\FrontNotificationController;
 use App\Http\Controllers\CustomerAuthController;
 use Illuminate\Support\Facades\Route;
@@ -73,6 +74,9 @@ Route::middleware('customer')->group(function () {
     
     // 积分
     Route::get('/points', [FrontPointsController::class, 'index'])->name('points.index');
+    
+    // VIP会员
+    Route::get('/vip', [FrontVipController::class, 'index'])->name('vip.index');
     
     // 售后服务
     Route::get('/after-sales', [FrontAfterSaleController::class, 'index'])->name('after-sales.index');

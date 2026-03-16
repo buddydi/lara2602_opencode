@@ -46,6 +46,33 @@ use App\Models\PointsRule;
                 </div>
                 <small style="color: #666;">如设置为50%，则最多可用积分抵扣订单金额的50%。设置为0表示不限制</small>
             </div>
+
+            <div class="form-group">
+                <label>注册获得积分</label>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <input type="number" name="rules[register_points]" value="{{ PointsRule::getValue('register_points', 0) }}" min="0" style="width: 80px; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                    <span> 积分</span>
+                </div>
+                <small style="color: #666;">新用户注册时获得的积分</small>
+            </div>
+            
+            <div class="form-group">
+                <label>完善资料获得积分</label>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <input type="number" name="rules[profile_points]" value="{{ PointsRule::getValue('profile_points', 0) }}" min="0" style="width: 80px; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                    <span> 积分</span>
+                </div>
+                <small style="color: #666;">用户完善个人资料时获得的积分</small>
+            </div>
+            
+            <div class="form-group">
+                <label>每日签到获得积分</label>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <input type="number" name="rules[checkin_points]" value="{{ PointsRule::getValue('checkin_points', 1) }}" min="0" style="width: 80px; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                    <span> 积分</span>
+                </div>
+                <small style="color: #666;">用户每日签到时获得的积分</small>
+            </div>
         </div>
     </div>
 
