@@ -301,6 +301,16 @@ use Illuminate\Support\Facades\Auth; ?>
                 <span class="menu-text">系统设置</span>
                 <span class="tooltip">系统设置</span>
             </a>
+            <a href="{{ route('admin.api-endpoints.index') }}" {{ str_starts_with($currentRoute, 'api-endpoints') ? 'class=active' : '' }}">
+                <span class="menu-icon">接</span>
+                <span class="menu-text">接口管理</span>
+                <span class="tooltip">API接口管理</span>
+            </a>
+            <a href="{{ route('admin.api-tokens.index') }}" {{ str_starts_with($currentRoute, 'api-tokens') ? 'class=active' : '' }}">
+                <span class="menu-icon">T</span>
+                <span class="menu-text">Token管理</span>
+                <span class="tooltip">API Token管理</span>
+            </a>
         </div>
         <div class="main" id="main">
             @if (session('success'))

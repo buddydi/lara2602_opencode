@@ -197,6 +197,29 @@ Route::middleware('auth')->group(function () {
         Route::get('/settings/shop', [\App\Http\Controllers\Admin\SettingsController::class, 'shop'])->name('settings.shop');
         Route::put('/settings/shop', [\App\Http\Controllers\Admin\SettingsController::class, 'shopUpdate'])->name('settings.shop.update');
         
+        // API 接口管理
+        Route::get('/api-endpoints', [\App\Http\Controllers\Admin\ApiEndpointController::class, 'index'])->name('api-endpoints.index');
+        Route::get('/api-endpoints/create', [\App\Http\Controllers\Admin\ApiEndpointController::class, 'create'])->name('api-endpoints.create');
+        Route::post('/api-endpoints', [\App\Http\Controllers\Admin\ApiEndpointController::class, 'store'])->name('api-endpoints.store');
+        Route::get('/api-endpoints/{apiEndpoint}', [\App\Http\Controllers\Admin\ApiEndpointController::class, 'show'])->name('api-endpoints.show');
+        Route::get('/api-endpoints/{apiEndpoint}/edit', [\App\Http\Controllers\Admin\ApiEndpointController::class, 'edit'])->name('api-endpoints.edit');
+        Route::put('/api-endpoints/{apiEndpoint}', [\App\Http\Controllers\Admin\ApiEndpointController::class, 'update'])->name('api-endpoints.update');
+        Route::delete('/api-endpoints/{apiEndpoint}', [\App\Http\Controllers\Admin\ApiEndpointController::class, 'destroy'])->name('api-endpoints.destroy');
+        Route::post('/api-endpoints/{apiEndpoint}/toggle', [\App\Http\Controllers\Admin\ApiEndpointController::class, 'toggle'])->name('api-endpoints.toggle');
+        Route::get('/api-endpoints/sync', [\App\Http\Controllers\Admin\ApiEndpointController::class, 'sync'])->name('api-endpoints.sync');
+        
+        // API Token 管理
+        Route::get('/api-tokens', [\App\Http\Controllers\Admin\ApiTokenController::class, 'index'])->name('api-tokens.index');
+        Route::get('/api-tokens/create', [\App\Http\Controllers\Admin\ApiTokenController::class, 'create'])->name('api-tokens.create');
+        Route::post('/api-tokens', [\App\Http\Controllers\Admin\ApiTokenController::class, 'store'])->name('api-tokens.store');
+        Route::get('/api-tokens/{apiToken}', [\App\Http\Controllers\Admin\ApiTokenController::class, 'show'])->name('api-tokens.show');
+        Route::get('/api-tokens/{apiToken}/edit', [\App\Http\Controllers\Admin\ApiTokenController::class, 'edit'])->name('api-tokens.edit');
+        Route::put('/api-tokens/{apiToken}', [\App\Http\Controllers\Admin\ApiTokenController::class, 'update'])->name('api-tokens.update');
+        Route::delete('/api-tokens/{apiToken}', [\App\Http\Controllers\Admin\ApiTokenController::class, 'destroy'])->name('api-tokens.destroy');
+        Route::post('/api-tokens/{apiToken}/toggle', [\App\Http\Controllers\Admin\ApiTokenController::class, 'toggle'])->name('api-tokens.toggle');
+        Route::post('/api-tokens/{apiToken}/regenerate', [\App\Http\Controllers\Admin\ApiTokenController::class, 'regenerate'])->name('api-tokens.regenerate');
+        Route::post('/api-tokens/test', [\App\Http\Controllers\Admin\ApiTokenController::class, 'test'])->name('api-tokens.test');
+        
         // 商品模块
         Route::resource('product-categories', ProductCategoryController::class);
         Route::resource('brands', BrandController::class);
