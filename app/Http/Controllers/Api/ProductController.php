@@ -2,93 +2,76 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Repositories\ProductRepository;
+use App\Models\Product;
+use App\Models\ProductCategory;
 use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 
-class ProductController extends Controller
+class ProductController extends BaseApiController
 {
-    protected ProductRepository $productRepository;
-
-    public function __construct(ProductRepository $productRepository)
+    public function index(Request $request)
     {
-        $this->productRepository = $productRepository;
-    }
+        $query = Product::with(['category', 'brand']);
 
-    public function index(Request $request): JsonResponse
-    {
-        $filters = [
-            'keyword' => $request->input('keyword'),
-            'category_id' => $request->input('category_id'),
-            'is_active' => $request->boolean('is_active', true),
-            'is_featured' => $request->boolean('is_featured'),
-        ];
-
-        $perPage = $request->input('per_page', 15);
-        $products = $this->productRepository->getAllProducts($filters, $perPage);
-        
-        return response()->json([
-            'success' => true,
-            'data' => $products
-        ]);
-    }
-
-    public function show(int $id): JsonResponse
-    {
-        $product = $this->productRepository->getProductById($id);
-        
-        if (!$product) {
-            return response()->json([
-                'success' => false,
-                'message' => '产品不存在'
-            ], 404);
+        if ($request->keyword) {
+            $query->where(function($q) use ($request) {
+                $q->where('name', 'like', "%{$request->keyword}%")
+                  ->orWhere('description', 'like', "%{$request->keyword}%");
+            });
         }
 
-        return response()->json([
-            'success' => true,
-            'data' => $product
-        ]);
+        if ($request->category_id) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        $products = $query->orderBy('id', 'desc')->paginate($request->per_page ?? 15);
+
+        return $this->success($products);
     }
 
-    public function byCategory(Request $request, int $categoryId): JsonResponse
+    public function show(Product $product)
     {
-        $perPage = $request->input('per_page', 15);
-        $products = $this->productRepository->getProductsByCategory($categoryId, $perPage);
-
-        return response()->json([
-            'success' => true,
-            'data' => $products
-        ]);
+        $product->load(['category', 'brand', 'attributes', 'skus']);
+        return $this->success($product);
     }
 
-    public function search(Request $request): JsonResponse
+    public function featured()
     {
-        $keyword = $request->input('q', '');
+        $products = Product::with(['category', 'brand'])
+            ->orderBy('id', 'desc')
+            ->limit(10)
+            ->get();
+        return $this->success($products);
+    }
+
+    public function search(Request $request)
+    {
+        $keyword = $request->q ?? $request->keyword ?? '';
         
         if (strlen($keyword) < 2) {
-            return response()->json([
-                'success' => false,
-                'message' => '搜索关键词至少2个字符'
-            ], 400);
+            return $this->error('搜索关键词至少2个字符', 400);
         }
 
-        $perPage = $request->input('per_page', 15);
-        $products = $this->productRepository->searchProducts($keyword, $perPage);
+        $products = Product::with(['category', 'brand'])
+            ->where('name', 'like', "%{$keyword}%")
+            ->orderBy('id', 'desc')
+            ->paginate($request->per_page ?? 15);
 
-        return response()->json([
-            'success' => true,
-            'data' => $products
-        ]);
+        return $this->success($products);
     }
 
-    public function featured(): JsonResponse
+    public function byCategory(Request $request, int $categoryId)
     {
-        $products = $this->productRepository->getFeaturedProducts(10);
+        $products = Product::with(['category', 'brand'])
+            ->where('category_id', $categoryId)
+            ->orderBy('id', 'desc')
+            ->paginate($request->per_page ?? 15);
 
-        return response()->json([
-            'success' => true,
-            'data' => $products
-        ]);
+        return $this->success($products);
+    }
+
+    public function categories()
+    {
+        $categories = ProductCategory::where('is_active', true)->get();
+        return $this->success($categories);
     }
 }

@@ -9,8 +9,40 @@ use App\Http\Controllers\Api\RoleApiController;
 use App\Http\Controllers\Api\PermissionApiController;
 use App\Http\Controllers\Api\UserApiController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\CustomerAuthController;
+use App\Http\Controllers\Api\CartController;
+use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\AddressController;
 
-// 产品API（公开）
+// 客户认证API（前台用户）
+Route::prefix('customer')->group(function () {
+    Route::post('register', [CustomerAuthController::class, 'register']);
+    Route::post('login', [CustomerAuthController::class, 'login']);
+    
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('me', [CustomerAuthController::class, 'me']);
+        Route::put('profile', [CustomerAuthController::class, 'updateProfile']);
+        Route::post('logout', [CustomerAuthController::class, 'logout']);
+        
+        // 收货地址
+        Route::apiResource('addresses', AddressController::class);
+        
+        // 购物车
+        Route::get('cart', [CartController::class, 'index']);
+        Route::post('cart', [CartController::class, 'store']);
+        Route::put('cart/{cartItem}', [CartController::class, 'update']);
+        Route::delete('cart/{cartItem}', [CartController::class, 'destroy']);
+        Route::delete('cart', [CartController::class, 'clear']);
+        
+        // 订单
+        Route::get('orders', [OrderController::class, 'index']);
+        Route::post('orders', [OrderController::class, 'store']);
+        Route::get('orders/{order}', [OrderController::class, 'show']);
+        Route::post('orders/{order}/cancel', [OrderController::class, 'cancel']);
+    });
+});
+
+// 商品API（公开）
 Route::get('products', [ProductController::class, 'index']);
 Route::get('products/featured', [ProductController::class, 'featured']);
 Route::get('products/search', [ProductController::class, 'search']);

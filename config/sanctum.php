@@ -1,6 +1,7 @@
 <?php
 
 use Laravel\Sanctum\Sanctum;
+use App\Models\Customer;
 
 return [
 
@@ -35,6 +36,18 @@ return [
     */
 
     'guard' => ['web'],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Model
+    |--------------------------------------------------------------------------
+    |
+    | This value is the model that Sanctum will use to manage API tokens.
+    | We configure it to use Customer for customer authentication.
+    |
+    */
+
+    'model' => Customer::class,
 
     /*
     |--------------------------------------------------------------------------
