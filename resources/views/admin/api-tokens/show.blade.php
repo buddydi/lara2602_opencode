@@ -5,7 +5,7 @@
 @section('content')
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-5">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Token详情</h3>
@@ -17,7 +17,7 @@
                 <div class="card-body">
                     <table class="table table-bordered">
                         <tr>
-                            <th style="width: 150px;">ID</th>
+                            <th style="width: 100px;">ID</th>
                             <td>{{ $apiToken->id }}</td>
                         </tr>
                         <tr>
@@ -28,7 +28,7 @@
                             <th>Token</th>
                             <td>
                                 <div class="input-group">
-                                    <input type="text" class="form-control" id="token-value" value="{{ $apiToken->token }}" readonly>
+                                    <input type="text" class="form-control" id="token-value" value="{{ $apiToken->token }}" readonly style="font-size:12px;">
                                     <div class="input-group-append">
                                         <button class="btn btn-outline-secondary" type="button" onclick="copyToken()">复制</button>
                                     </div>
@@ -69,10 +69,6 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>最后使用</th>
-                            <td>{{ $apiToken->last_used_at?->format('Y-m-d H:i:s') ?? '从未使用' }}</td>
-                        </tr>
-                        <tr>
                             <th>状态</th>
                             <td>
                                 @if($apiToken->is_active)
@@ -81,10 +77,6 @@
                                     <span class="badge badge-secondary">禁用</span>
                                 @endif
                             </td>
-                        </tr>
-                        <tr>
-                            <th>描述</th>
-                            <td>{{ $apiToken->description ?? '无' }}</td>
                         </tr>
                         <tr>
                             <th>创建时间</th>
@@ -103,54 +95,60 @@
                             @csrf
                             <button type="submit" class="btn btn-danger">重新生成</button>
                         </form>
-                        <form action="{{ route('admin.api-tokens.destroy', $apiToken) }}" method="POST" style="display:inline;" onsubmit="return confirm('确定删除？')">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-secondary">删除</button>
-                        </form>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-7">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">在线测试</h3>
+                    <h3 class="card-title">在线API测试</h3>
                 </div>
                 <div class="card-body">
                     <form id="api-test-form">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <select name="method" id="test-method" class="form-control" required>
-                                    <option value="GET">GET</option>
-                                    <option value="POST">POST</option>
-                                    <option value="PUT">PUT</option>
-                                    <option value="PATCH">PATCH</option>
-                                    <option value="DELETE">DELETE</option>
-                                </select>
-                            </div>
-                            <div class="col-md-9">
-                                <input type="url" name="url" id="test-url" class="form-control" placeholder="http://test.lara2602.local/api/products" required>
+                        <div class="form-group">
+                            <label>请求地址</label>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <select name="method" id="test-method" class="form-control" required>
+                                        <option value="GET" selected>GET</option>
+                                        <option value="POST">POST</option>
+                                        <option value="PUT">PUT</option>
+                                        <option value="PATCH">PATCH</option>
+                                        <option value="DELETE">DELETE</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-9">
+                                    <input type="url" name="url" id="test-url" class="form-control" 
+                                           value="http://test.lara2602.local/api/products" 
+                                           placeholder="http://test.lara2602.local/api/products" required
+                                           style="font-size:14px; padding: 10px;">
+                                </div>
                             </div>
                         </div>
 
-                        <div class="form-group mt-3">
+                        <div class="form-group">
                             <label>Authorization Token</label>
-                            <input type="text" name="token" id="test-token" class="form-control" value="{{ $apiToken->token }}">
+                            <input type="text" name="token" id="test-token" class="form-control" 
+                                   value="{{ $apiToken->token }}"
+                                   style="font-size:13px;">
                         </div>
 
                         <div class="form-group">
                             <label>请求体 (JSON)</label>
-                            <textarea name="body" id="test-body" class="form-control" rows="4" placeholder='{"key": "value"}'></textarea>
+                            <textarea name="body" id="test-body" class="form-control" rows="5" 
+                                      placeholder='{"key": "value"}'
+                                      style="font-family: monospace; font-size:13px;"></textarea>
                         </div>
 
-                        <button type="submit" class="btn btn-primary">发送请求</button>
+                        <button type="submit" class="btn btn-primary btn-lg" id="send-btn">发送请求</button>
+                        <button type="button" class="btn btn-secondary btn-lg" onclick="clearResponse()">清空响应</button>
                     </form>
 
-                    <div class="mt-3">
-                        <label>响应结果</label>
-                        <pre id="test-response" style="background:#f5f5f5;padding:15px;border-radius:5px;min-height:200px;max-height:400px;overflow:auto;">等待发送请求...</pre>
+                    <div class="form-group mt-4">
+                        <label><strong>响应结果</strong> <span id="response-status"></span></label>
+                        <pre id="test-response" style="background:#1e1e1e;color:#d4d4d4;padding:15px;border-radius:5px;min-height:300px;max-height:500px;overflow:auto;font-size:13px;">点击「发送请求」按钮开始测试...</pre>
                     </div>
                 </div>
             </div>
@@ -169,37 +167,63 @@ function copyToken() {
     alert('Token已复制到剪贴板');
 }
 
-$(document).ready(function() {
-    $('#api-test-form').on('submit', function(e) {
-        e.preventDefault();
-        
-        const method = $('#test-method').val();
-        const url = $('#test-url').val();
-        const token = $('#test-token').val();
-        const body = $('#test-body').val();
-        
-        $('#test-response').text('正在发送请求...');
-        
-        $.ajax({
-            url: '{{ route('admin.api-tokens.test') }}',
-            type: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            data: {
-                method: method,
-                url: url,
-                token: token,
-                body: body
-            },
-            success: function(response) {
-                $('#test-response').text(JSON.stringify(response, null, 2));
-            },
-            error: function(xhr) {
-                $('#test-response').text('请求失败: ' + xhr.status + '\n' + xhr.responseText);
+function clearResponse() {
+    document.getElementById('test-response').textContent = '点击「发送请求」按钮开始测试...';
+    document.getElementById('response-status').textContent = '';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('api-test-form');
+    
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const method = document.getElementById('test-method').value;
+            const url = document.getElementById('test-url').value;
+            const token = document.getElementById('test-token').value;
+            const body = document.getElementById('test-body').value;
+            const sendBtn = document.getElementById('send-btn');
+            
+            document.getElementById('test-response').textContent = '正在发送请求，请稍候...';
+            document.getElementById('response-status').textContent = '';
+            sendBtn.disabled = true;
+            sendBtn.textContent = '请求中...';
+            
+            const formData = new FormData();
+            formData.append('method', method);
+            formData.append('url', url);
+            formData.append('token', token);
+            if (body.trim()) {
+                formData.append('body', body);
             }
+            formData.append('_token', '{{ csrf_token() }}');
+            
+            fetch('{{ route('admin.api-tokens.test') }}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(function(response) {
+                document.getElementById('response-status').innerHTML = '<span style="color: #4caf50;">HTTP ' + response.status + '</span>';
+                return response.json();
+            })
+            .then(function(data) {
+                document.getElementById('test-response').textContent = JSON.stringify(data, null, 2);
+            })
+            .catch(function(error) {
+                document.getElementById('response-status').innerHTML = '<span style="color: #f44336;">请求失败</span>';
+                document.getElementById('test-response').textContent = '错误: ' + error.message;
+            })
+            .finally(function() {
+                sendBtn.disabled = false;
+                sendBtn.textContent = '发送请求';
+            });
         });
-    });
+    }
 });
 </script>
 @endsection
