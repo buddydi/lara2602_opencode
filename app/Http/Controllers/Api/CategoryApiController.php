@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Category;
+use App\Models\ProductCategory as Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
