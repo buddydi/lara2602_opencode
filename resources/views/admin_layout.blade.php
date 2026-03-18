@@ -339,5 +339,6 @@ use Illuminate\Support\Facades\Auth; ?>
             }
         });
     </script>
+    @yield('scripts')
 </body>
 </html>

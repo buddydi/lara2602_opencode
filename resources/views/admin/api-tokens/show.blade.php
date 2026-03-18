@@ -106,12 +106,12 @@
                     <h3 class="card-title">在线API测试</h3>
                 </div>
                 <div class="card-body">
-                    <form id="api-test-form">
+                    <form id="api-test-form" onsubmit="return false;">
                         <div class="form-group">
-                            <label>请求地址</label>
+                            <label>请求地址 (URL)</label>
                             <div class="row">
-                                <div class="col-md-3">
-                                    <select name="method" id="test-method" class="form-control" required>
+                                <div class="col-2">
+                                    <select name="method" id="test-method" class="form-control" style="font-size:16px;padding:10px;">
                                         <option value="GET" selected>GET</option>
                                         <option value="POST">POST</option>
                                         <option value="PUT">PUT</option>
@@ -119,11 +119,11 @@
                                         <option value="DELETE">DELETE</option>
                                     </select>
                                 </div>
-                                <div class="col-md-9">
-                                    <input type="url" name="url" id="test-url" class="form-control" 
+                                <div class="col-10">
+                                    <input type="text" name="url" id="test-url" class="form-control" 
                                            value="http://test.lara2602.local/api/products" 
-                                           placeholder="http://test.lara2602.local/api/products" required
-                                           style="font-size:14px; padding: 10px;">
+                                           placeholder="http://test.lara2602.local/api/products"
+                                           style="font-size:14px;padding:10px;width:100%;">
                                 </div>
                             </div>
                         </div>
@@ -132,23 +132,23 @@
                             <label>Authorization Token</label>
                             <input type="text" name="token" id="test-token" class="form-control" 
                                    value="{{ $apiToken->token }}"
-                                   style="font-size:13px;">
+                                   style="font-size:14px;padding:10px;width:100%;">
                         </div>
 
                         <div class="form-group">
-                            <label>请求体 (JSON)</label>
-                            <textarea name="body" id="test-body" class="form-control" rows="5" 
+                            <label>请求体 (JSON格式)</label>
+                            <textarea name="body" id="test-body" class="form-control" rows="6" 
                                       placeholder='{"key": "value"}'
-                                      style="font-family: monospace; font-size:13px;"></textarea>
+                                      style="font-family: Consolas, Monaco, monospace; font-size:14px;padding:12px;width:100%;"></textarea>
                         </div>
 
-                        <button type="submit" class="btn btn-primary btn-lg" id="send-btn">发送请求</button>
+                        <button type="button" class="btn btn-primary btn-lg" id="send-btn" onclick="sendRequest()">发送请求</button>
                         <button type="button" class="btn btn-secondary btn-lg" onclick="clearResponse()">清空响应</button>
                     </form>
 
                     <div class="form-group mt-4">
                         <label><strong>响应结果</strong> <span id="response-status"></span></label>
-                        <pre id="test-response" style="background:#1e1e1e;color:#d4d4d4;padding:15px;border-radius:5px;min-height:300px;max-height:500px;overflow:auto;font-size:13px;">点击「发送请求」按钮开始测试...</pre>
+                        <pre id="test-response" style="background:#1e1e1e;color:#d4d4d4;padding:15px;border-radius:5px;min-height:300px;max-height:500px;overflow:auto;font-size:13px;width:100%;">点击「发送请求」按钮开始测试...</pre>
                     </div>
                 </div>
             </div>
@@ -161,7 +161,7 @@
 @section('scripts')
 <script>
 function copyToken() {
-    const input = document.getElementById('token-value');
+    var input = document.getElementById('token-value');
     input.select();
     document.execCommand('copy');
     alert('Token已复制到剪贴板');
@@ -172,58 +172,50 @@ function clearResponse() {
     document.getElementById('response-status').textContent = '';
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('api-test-form');
+function sendRequest() {
+    var method = document.getElementById('test-method').value;
+    var url = document.getElementById('test-url').value;
+    var token = document.getElementById('test-token').value;
+    var body = document.getElementById('test-body').value;
+    var sendBtn = document.getElementById('send-btn');
     
-    if (form) {
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const method = document.getElementById('test-method').value;
-            const url = document.getElementById('test-url').value;
-            const token = document.getElementById('test-token').value;
-            const body = document.getElementById('test-body').value;
-            const sendBtn = document.getElementById('send-btn');
-            
-            document.getElementById('test-response').textContent = '正在发送请求，请稍候...';
-            document.getElementById('response-status').textContent = '';
-            sendBtn.disabled = true;
-            sendBtn.textContent = '请求中...';
-            
-            const formData = new FormData();
-            formData.append('method', method);
-            formData.append('url', url);
-            formData.append('token', token);
-            if (body.trim()) {
-                formData.append('body', body);
-            }
-            formData.append('_token', '{{ csrf_token() }}');
-            
-            fetch('{{ route('admin.api-tokens.test') }}', {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'Accept': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            })
-            .then(function(response) {
-                document.getElementById('response-status').innerHTML = '<span style="color: #4caf50;">HTTP ' + response.status + '</span>';
-                return response.json();
-            })
-            .then(function(data) {
-                document.getElementById('test-response').textContent = JSON.stringify(data, null, 2);
-            })
-            .catch(function(error) {
-                document.getElementById('response-status').innerHTML = '<span style="color: #f44336;">请求失败</span>';
-                document.getElementById('test-response').textContent = '错误: ' + error.message;
-            })
-            .finally(function() {
-                sendBtn.disabled = false;
-                sendBtn.textContent = '发送请求';
-            });
-        });
+    document.getElementById('test-response').textContent = '正在发送请求，请稍候...';
+    document.getElementById('response-status').textContent = '';
+    sendBtn.disabled = true;
+    sendBtn.textContent = '请求中...';
+    
+    var formData = new FormData();
+    formData.append('method', method);
+    formData.append('url', url);
+    formData.append('token', token);
+    if (body.trim()) {
+        formData.append('body', body);
     }
-});
+    formData.append('_token', '{{ csrf_token() }}');
+    
+    fetch('{{ route('admin.api-tokens.test') }}', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(function(response) {
+        document.getElementById('response-status').innerHTML = '<span style="color: #4caf50;">HTTP ' + response.status + '</span>';
+        return response.json();
+    })
+    .then(function(data) {
+        document.getElementById('test-response').textContent = JSON.stringify(data, null, 2);
+    })
+    .catch(function(error) {
+        document.getElementById('response-status').innerHTML = '<span style="color: #f44336;">请求失败</span>';
+        document.getElementById('test-response').textContent = '错误: ' + error.message;
+    })
+    .finally(function() {
+        sendBtn.disabled = false;
+        sendBtn.textContent = '发送请求';
+    });
+}
 </script>
 @endsection
